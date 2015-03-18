@@ -20,7 +20,7 @@
 
     <core-animated-pages selected="{{selected}}" transitions="">
       <section>
-        <h1>Ik ben {{verifiedStatus}}.</h1>
+        <h1>Verified: {{verifiedStatus}}.</h1>
         <input type="text" value="{{eidId}}" placeholder="Identiteitskaartnummer" />
         <br />
         <core-icon-button icon="add" on-tap="{{startVerification}}">Ik wil geverifieerd worden</core-icon-button>
@@ -78,13 +78,7 @@ Polymer({
             if(result===null){
               that.createUser(); 
             } else {
-              if(result.verified){
-                that.verifiedStatus = "geverifieerd";
-              };
-              if(!result.verified){
-                that.verifiedStatus = "nog niet geverifieerd";
-              };
-
+              that.checkVerification();
               // Get vouchers
               that.vouchers = [];
               vouchFB = new Firebase('https://blazing-fire-6426.firebaseio.com/user/'+userid+'/vouchers/');
@@ -98,16 +92,27 @@ Polymer({
         }); 
         },
 
-          
-
         createUser: function(){
           var userid = this.$.globals.values.user.data.id;
           var roles = this.$.globals.values.user.data.roles;
+          var userobject = this.$.globals.values.user.data;
           var userFB = new Firebase("https://blazing-fire-6426.firebaseio.com/verify/users/"+userid+'/');
           userFB.set(true);
           userFB.set({"roles": roles});
           userFB.set({"verified": false});
+          userFB.set({"aosuser": userobject});
+          this.checkVerification();
           //this.$.FBuser.requery();
+        },
+
+        checkVerification: function(){
+          var that = this;
+          console.log('starting verification check');
+          var userid = this.$.globals.values.user.data.id;
+          var userFB = new Firebase("https://blazing-fire-6426.firebaseio.com/verify/users/"+userid+'/aosuser/EidEnabled/');
+          userFB.once('value', function(snap){
+            that.verifiedStatus = snap.val();
+          });
         },
 
         startVerification: function(){
@@ -130,7 +135,6 @@ Polymer({
             console.log(snap.val());
             that.eidVer = snap.val();
           });
-
         },
 
         confirmEid: function(){
@@ -138,7 +142,7 @@ Polymer({
           UserID = this.eidVer.userid;
           code = this.ambCode;
           myUserId = this.$.globals.values.user.data.id;
-          
+
           var verFB = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+UserID+"/vouchers/"+myUserId+"/");
           verFB.set(true);
           // Delete token

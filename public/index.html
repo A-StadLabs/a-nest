@@ -6,7 +6,6 @@
   <title>aOS</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <meta name="twitter:widgets:csp" content="on">
   <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
   <link rel="apple-touch-icon" href="images/astadlabs.png">
     <!-- 3. responsive-sh*t. -->
@@ -17,7 +16,6 @@
   <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
   <!-- endbuild-->
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-  <script src="bower_components/qr-code/src/qr.js"></script>
 
   <link rel="import" href="elements/elements.html">
   <!-- endbuild-->
@@ -27,43 +25,18 @@
 
 <aos-globals id="globals"></aos-globals>
 
-<core-scroll-header-panel fit>
-
-  <core-toolbar>
-    <aos-kaai theme="dark" language="nl" id="kaai"></aos-kaai>
-  </core-toolbar>
-
   <app-router id="router" fit trailingSlash="ignore" mode="hash">
-    <app-route path="/" import="apps/aos-homescreen/aos-homescreen.html"></app-route>
-    <app-route path="/knooppunt" import="apps/aos-knooppunt/aos-knooppunt.html"></app-route>
-    <app-route path="/profiel/:tabby" import="apps/aos-profiel/aos-profiel.html"></app-route>
-    <app-route path="/u/:userid" import="apps/aos-profiel/aos-profiel.html"></app-route>
-    <app-route path="/login" import="apps/aos-login/aos-login.html"></app-route>
-    <app-route path="/search" import="apps/aos-search/aos-search.html"></app-route>
-    <app-route path="/info" import="apps/aos-info/aos-info.html"></app-route>
-    <app-route path="/notificaties" import="apps/aos-notificaties/aos-notificaties.html"></app-route>
-    <app-route path="/chat" import="apps/aos-chat/aos-chat.html"></app-route>
-    <app-route path="/appadmin" import="apps/aos-appadmin/aos-appadmin.html"></app-route>
-    <app-route path="/babbles/:key" import="apps/aos-babbles/aos-babbles.html"></app-route>
-    <app-route path="/songsvanongs" import="apps/aos-songsvanongs/aos-songsvanongs.html"></app-route>
-    <app-route path="/eloket" import="apps/aos-eloket/aos-eloket.html"></app-route>
-    <app-route path="/eobjects" import="elements/aos-eniversum/aos-eniversum.html"></app-route>
+    <app-route path="/" import="apps/aos-smslogin/aos-smslogin.html"></app-route>
+
     <app-route path="/verify" import="apps/aos-verify/aos-verify.html"></app-route>
 
-
-    <app-route path="/universe" import="elements/aos-useruniverse/aos-useruniverse.html"></app-route>
     <app-route path="/*" import="apps/aos-404/aos-404.html"></app-route>
   </app-router>
-
-  <core-overlay backdrop layered id="overlay">
-    <aos-sharing id="share" link="{{shareLink}}"></aos-sharing>
-  </core-overlay>
 
 <!--   <aos-chat></aos-chat>
  -->
   <paper-toast id="toast" text="{{toastText}}" duration="5000"></paper-toast>
 
-</core-scroll-header-panel>
 <!-- build:js scripts/app.js -->
 <script src="scripts/app.js"></script>
 <!-- endbuild-->

@@ -1,39 +1,108 @@
+'use strict';
 var express = require('express');
 var app = express();
 var request = require('request');
 var toughcookie = require('tough-cookie');
-var session = require('express-session');
+// var session = require('express-session');
+var passport = require('passport');
 var Firebase = require('firebase');
-
+//require the Twilio module and create a REST client
+var twilio = require('twilio/lib')('ACb03474328bef2977709d183b114397e6', 'ac8b0b530c07485c4a50af262248624c');
+//var client = require('../lib')('ACCOUNT_SID', 'AUTH_TOKEN');
 app.set('port', (process.env.PORT || 5000));
 
 // serveer de polymeer
 app.use(express.static(__dirname + '/public'));
 
-app.use(session({
-  secret: 'benissangekkie',
-  resave: true,
-  saveUninitialized: true
-}));
+app.use(passport.session());
 
 // gewuun ne status update
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
 
-// Search voor infofiches
-app.get('/searching', function(req, res){
-	var val = req.query.search;
- 	//console.log(val);
- 	request.post({
-  		headers: {'Content-Type' : 'application/json'},
-  		method: 'post',
-  		jar: true,
-  		url:     'https://www.antwerpen.be/srv/content/d/search?save=true',
-  		json: {"type":[{"key":9,"value":"Infofiche","type":"type"}],"titel":[{"key":"titel","value":val,"type":"titel"}]}
-	}, function(error, response, body){
-  		res.send(body);
-	});
+//Een api om een sms te sturen
+app.get('/sendsms', function(req, res){
+  var gsmnummer = req.query.gsmnummer;
+  console.log(gsmnummer);
+  //Send an text message
+  twilio.sendMessage({
+
+    to: gsmnummer, // Any number Twilio can deliver to
+    from: '+32460202222', // A number you bought from Twilio and can use for outbound communication
+    body: 'Hier komt dan de login code.' // body of the SMS message
+
+    }, function(err, responseData) { //this function is executed when a response is received from Twilio
+
+    if (!err) { // "err" is an error received during the request, if any
+
+        // "responseData" is a JavaScript object containing data received from Twilio.
+        // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+        // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+
+        console.log(responseData.from); // outputs "+14506667788"
+        console.log(responseData.body); // outputs "word to your mother."
+
+    }
+
+    if(err) {
+      console.log(err);
+    }
+
+  });
+  res.send('iets');
+});
+
+
+// Incoming sms checken
+app.get('/incoming', function(req, res){
+  console.log(res);
+});
+
+// Check of de user al bestaat, indien niet gaan we een user aanmaken.
+
+app.get('/usercheck', function(req, res){
+  //console.log(val);
+  var searchstring = req.query.gsm;
+  var findUser = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+searchstring+"/");
+    findUser.once("value", function(snapshot) {
+      if(snapshot.val()){
+        console.log('ik heb een user gevonden: ', snapshot.key());
+        var usergsm = snapshot.key();
+        var code = Math.floor(Math.random() * 900000) + 100000;
+        var setCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/"+usergsm+"/");
+        setCode.set(true);
+      } else {
+        console.log('nu zou ik een nieuwe user aanmaken');
+        var createUser = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+searchstring+"/");
+        var code = Math.floor(Math.random() * 900000) + 100000;
+        var setCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/"+searchstring+"/");
+        setCode.set(true);
+        createUser.set({"gsm": searchstring, "lastlogin": Firebase.ServerValue.TIMESTAMP});
+      }  
+    res.send(code);
+  });
+});
+
+// Check code en login
+app.get('/codecheck', function(req, res){
+  var code = req.query.kode;
+  var gsm = req.query.gsm;
+  var findCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/");
+    findCode.once("value", function(snapshot) {
+      if(snapshot.val()){
+        //console.log(snapshot.val());
+        res.send('ok ik heb een code voor '+gsm);
+        var getUser = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
+        getUser.once("value", function(snapshot) {
+          console.log(snapshot.val());
+          req.session.userobject = snapshot.val();
+          console.log(req.session.userobject);  
+        }); 
+      } else {
+        res.send('geen code gevonden.');
+      }
+    });
 });
 
 // Login voor profiel
@@ -50,9 +119,9 @@ app.get('/login', function(req, res){
 	}, function(error, response, body){
 		  //req.session.userobject = body;
       console.log(body.success);
-      if(body.success==true){
+      if(body.success===true){
         req.session.userobject = body;
-      };
+      }
   		res.send(body);
 	});
 });
@@ -68,11 +137,13 @@ app.get('/logout', function(req, res){
 app.get('/user', function(req, res){
 	if(req.session.userobject){
 		res.send(req.session.userobject);
+    console.log(req.session.userobject);
 	} else {
-		res.send({ 'status': 'E', 'msg': 'User not logged in.'});
-    req.session.destroy(function(err) {
+    console.log(req.session.userobject);
+		res.send({ 'userstatus': 'E', 'msg': 'User not logged in.'});
+    //req.session.destroy(function(err) {
     // cannot access session here
-  });
+  //});
 	}
 });
 
@@ -112,88 +183,7 @@ app.get('/notifications', function(req, res){
 	});
 });
 
-//Infofiche detail opvragen
-app.get('/infofichedetail', function(req, res){
- 	//console.log(val);
- 	var val = req.query.infokey;
- 	request.get({url: 'https://www.antwerpen.be/srv/content/d/detail/id/'+val, jar: true}, function(error, response, body){
-  		res.send(body);
-	});
-});
-
-//Content opvragen
-app.get('/content', function(req, res){
-  //console.log(val);
-  var channelId = req.query.channelId;
-  var contentType = req.query.contentType;
-  var contentTags = req.query.contentTags;
-  var start = req.query.contentStart;
-  var limit = req.query.contentLimit;
-  if(contentTags!='undefined'){
-  request.get({url: 'https://www.antwerpen.be/srv/content/d/channel/'+channelId+'/content-type/'+contentType+'/tags/'+contentTags+'/start/'+start+'/limit/'+limit, jar: true}, function(error, response, body){
-      res.send(body);
-  });
-} else {
-  request.get({url: 'https://www.antwerpen.be/srv/content/d/channel/'+channelId+'/content-type/'+contentType+'/start/'+start+'/limit/'+limit, jar: true}, function(error, response, body){
-      res.send(body);
-  });
-}
-});
-
-// infofiche categorieen
-app.get('/infofichecats', function(req, res){
-  //console.log(val);
-  var val = req.query.infokey;
-  request.get({url: 'https://www.antwerpen.be/srv/kanalen/d/category', jar: true}, function(error, response, body){
-      res.send(body);
-  });
-});
-
-// kanalen in thema
-app.get('/infofichesubcats', function(req, res){
-  //console.log(val);
-  var val = req.query.cat;
-  request.get({url: 'https://www.antwerpen.be/srv/kanalen/d/overzicht?official=true&sort=name&category='+val, jar: true}, function(error, response, body){
-      res.send(body);
-  });
-});
-
-// subcategorie in kanaal
-app.get('/infofichetabs', function(req, res){
-  //console.log(val);
-  var val = req.query.slug;
-  request.get({url: 'https://www.antwerpen.be/srv/kanalen/d/channels/'+val, jar: true}, function(error, response, body){
-      res.send(body);
-  });
-});
-
-//Homefeed opvragen
-app.get('/homefeed', function(req, res){
-  //console.log(val);
-  request.get({url: 'https://www.antwerpen.be/srv/kanalen/d/homefeed/0/9', jar: true}, function(error, response, body){
-      res.send(body);
-  });
-});
-
-//Helpcenter content opvragen
-app.get('/helpcenter', function(req, res){
-  //console.log(val);
-  request.get({url: 'https://www.antwerpen.be/srv/babbelbox/d/list?1417880524389&numberOfItems=20&start=0', jar: true}, function(error, response, body){
-      res.send(body);
-  });
-});
-
-//Helpcenter detail opvragen
-app.get('/helpcenter-item', function(req, res){
-  //console.log(val);
-  var val = req.query.item;
-  request.get({url: 'https://www.antwerpen.be/srv/babbelbox/d/show/'+val, jar: true}, function(error, response, body){
-      res.send(body);
-  });
-});
-
-// Chat
-// Vind een gebruiker
+//Vind een gebruiker
 app.get('/gebruiker', function(req, res){
   //console.log(val);
   var searchstring = req.query.search;
@@ -203,7 +193,7 @@ app.get('/gebruiker', function(req, res){
             if(snapshot.val().username.substr(0, searchstring.length) == searchstring){
               users.push({ "username": snapshot.val().username, "userid": snapshot.val().userid, "avatar": snapshot.val().avatar, "firstname": snapshot.val().firstname });
               console.log(users);
-            };
+            }
           });
 
           res.send(users);
@@ -233,44 +223,3 @@ app.get('/notificatie', function(req, res){
       console.log(body);
   });
 });
-
-// Highscore opslaan
-app.get('/highscore', function(req, res){
-  //console.log(val);
-  var naam = req.query.naam;
-  var score = req.query.score;
-  var score = parseInt(score);
-
-  request.post({
-    headers: {'Content-Type' : 'application/json'},
-    method: 'post',
-    url: 'https://sorteergame.firebaseio.com/.json', 
-    json: {naam: naam, // welke app verzend het
-    score: score},
-    }, function(error, response, body){
-      res.send(body);
-      console.log(body);
-  });
-});
-
-// Highscore weergeven
-app.get('/get-highscore', function(req, res){
-      var highscores = [];
-      var highscorestring = "";
-      var getScores = new Firebase("https://sorteergame.firebaseio.com");
-      var position = 1;
-      getScores.orderByChild("score").on("child_added", function(snapshot) {
-        highscores.push({ "naam": snapshot.val().naam, "score": snapshot.val().score });
-      });
-      //highscores.reverse();
-      var limitto = 10;
-      for (var i = highscores.length - 1; i >= 0; i--) {
-        //highscores[i];
-        if(limitto>0){
-          highscorestring = highscorestring+position+"\t"+highscores[i].naam + "\t" +highscores[i].score + "\n"; 
-          position++;//console.log(highscores);
-          limitto--;
-        };
-      };
-      res.send(highscorestring);
-  });
