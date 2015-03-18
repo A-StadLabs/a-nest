@@ -7,8 +7,7 @@ var toughcookie = require('tough-cookie');
 var passport = require('passport');
 var Firebase = require('firebase');
 //require the Twilio module and create a REST client
-var twilio = require('twilio/lib')('ACb03474328bef2977709d183b114397e6', 'ac8b0b530c07485c4a50af262248624c');
-//var client = require('../lib')('ACCOUNT_SID', 'AUTH_TOKEN');
+//var twilio = require('twilio/lib')('ACCOUNT_SID', 'AUTH_TOKEN');
 app.set('port', (process.env.PORT || 5000));
 
 // serveer de polymeer
