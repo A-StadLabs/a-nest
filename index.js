@@ -8,7 +8,6 @@ var Firebase = require('firebase');
 var config = require('./config.json');
 var twilio = require('twilio/lib')(config.twilio.ACCOUNT_SID, config.twilio.AUTH_TOKEN);
 
-
 app.use(cookieParser())
 app.use(cookieSession({
     keys: ['secret1', 'secret2']
@@ -27,11 +26,12 @@ app.listen(app.get('port'), function() {
 });
 
 function sendsms(gsmnummer,body,cb){
- twilio.sendMessage({
-    to: gsmnummer,
-    from: '+32460202222',
-    body: body
-    },cb);
+ // twilio.sendMessage({
+ //    to: gsmnummer,
+ //    from: '+32460202222',
+ //    body: body
+ //    },cb);
+console.log('send sms to '+gsmnummer+' met code '+body);
 }
 
 // exchange GSM number (parameter id ) for a custom code
@@ -43,13 +43,18 @@ function findById(gsm, fn) {
         console.log('ik heb een user gevonden: ', snapshot.key());
         var usergsm = snapshot.key();
         var setCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/"+gsm+"/");
+        // update last login date
+        var setLogin = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/lastlogin/");
+        setLogin.set(Firebase.ServerValue.TIMESTAMP);
         setCode.set(true);
+        //sendsms(gsm, code);
       } else {
         console.log('nu zou ik een nieuwe user aanmaken');
         var createUser = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
         createUser.set({"gsm": gsm, "lastlogin": Firebase.ServerValue.TIMESTAMP});
         var setCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/"+gsm+"/");
         setCode.set(true);
+        //sendsms(gsm, code);
       }
       fn(null,code); 
     });
@@ -141,9 +146,8 @@ app.get('/login', function(req, res){
 
 //logout
 app.get('/logout', function(req, res){
-	req.session.destroy(function(err) {
-  	// cannot access session here
-	});
+	req.session = null;
+  res.send("logged out");
 });
 
 // check user

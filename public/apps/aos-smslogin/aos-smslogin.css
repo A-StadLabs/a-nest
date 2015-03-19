@@ -1,4 +1,25 @@
 :host {
 	display: block;
-	margin-top: 60px !important;
+	font-family: 'Open Sans', sans-serif;
+	color: white;
+}
+
+.container {
+	padding: 40px;
+	text-align: center;
+}
+
+h2 {
+	font-size: 20px;
+	font-weight: 100;
+}
+
+paper-button {
+	background: #ff8d00;
+	color: white;
+}
+
+paper-input-decorator /deep/ ::-webkit-input-placeholder {
+    /* platform specific rules for placeholder text */
+    color: white;
 }

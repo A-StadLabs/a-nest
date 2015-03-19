@@ -1,55 +1,79 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../elements/aos-globals/aos-globals.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
+<link rel="import" href="../../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../../bower_components/core-animated-pages/transitions/slide-from-right.html">
+
 
 <polymer-element name="aos-smslogin" attributes="">
 
-  <template>
+<template>
 
-    <link rel="stylesheet" href="aos-smslogin.css" />
+  <link rel="stylesheet" href="aos-smslogin.css" />
+
+  <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right" fit>
+  <section>
     <core-ajax method="GET" id="checkUser" handleAs="json" url="/user" response="{{responseCheck}}" on-core-response="{{handleResponseCheck}}" auto></core-ajax>
 
     <core-ajax method="GET" id="userCheck" handleAs="json" url="/usercheck" response="{{responseUser}}" on-core-response="{{handleResponseUserCheck}}"></core-ajax>
 
     <core-ajax method="GET" id="codeCheck" handleAs="json" url="/codecheck" response="{{responseCode}}" on-core-response="{{handleResponseCodeCheck}}"></core-ajax>
 
-    <paper-button on-tap="{{recheckUser}}">N</paper-button>
-    <h2>Aanmelden / Registreren</h2>
-    <h3>{{responseCheck}}</h3>
+    <core-ajax method="GET" id="logout" handleAs="json" url="/logout" response="{{logoutresponse}}" on-core-response="{{handleLogout}}"></core-ajax>
+    <div class="container">
+      <h2>Aanmelden / Registreren</h2>
       <div>
+      <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
         <paper-input label="Jouw gsm nummer" id="input2" is="core-input" value="{{inputvalue}}" pattern="^[0-9].*"></paper-input>
       </div>
       <div>
         <paper-button raised on-tap="{{validate}}">Verzenden</paper-button>
       </div>
+    </section>
+    <section>
+      <div class="container">
 
-    <h2>Verifieer code</h2>
-    <div>
-        <paper-input label="Code" id="code" is="core-input" value="{{codevalue}}"></paper-input>
+        <h2>Verifieer code</h2>
+        <div>
+          <paper-input label="Code" id="code" is="core-input" value="{{codevalue}}"></paper-input>
+        </div>
+        <div>
+          <paper-button raised on-tap="{{checkcode}}">Verzenden</paper-button>
+        </div>
       </div>
-      <div>
-        <paper-button raised on-tap="{{checkcode}}">Verzenden</paper-button>
+    </section>
+    <section>
+      <div class="container">
+        Ok, je bent aangemeld.<br />
+        <paper-button raised on-tap="{{logout}}">Afmelden</paper-button>
       </div>
-  </template>
+    </section>
+  </core-animated-pages>
 
-  <script>
 
-    Polymer({
+</template>
 
-      ready: function() {
+<script>
 
-      	console.log('Knooppunt app loaded.'); 
+  Polymer({
 
-      },
+    ready: function() {
+     console.log('SMS Login app loaded.'); 
+     this.user = false;
+     this.section = 0;
+   },
 
-      validate: function() {
-        console.log(this.inputvalue);
-        var gsmnummer = this.inputvalue;
-        this.$.userCheck.params = { "gsm": gsmnummer };
+   validate: function() {
+    console.log(this.inputvalue);
+    var gsmnummer = this.inputvalue;
+    this.$.userCheck.params = { "gsm": gsmnummer };
         //this.$.loginAjax.params = { "username": "kingflurkel", "password": "mike48" };
         this.$.userCheck.go();
+        this.section = 1;
       },
 
       handleResponseUserCheck: function(){
@@ -59,6 +83,11 @@
 
       handleResponseCheck: function(){
         console.log(this.responseCheck);
+        if(!this.responseCheck.userstatus){
+          this.user = true;
+          this.section = 2;
+        };
+        console.log(this.user);
       },
 
       checkcode: function(){
@@ -72,14 +101,15 @@
         console.log(this.responseCode);
       },
 
-      recheckUser: function(){
-        this.$.checkUser.go();
+      logout: function(){
+        this.$.logout.go();
+        this.$.section = 0;
       }
 
 
 
     });
 
-  </script>
+</script>
 
 </polymer-element>

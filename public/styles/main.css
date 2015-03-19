@@ -30,25 +30,9 @@ paper-toast {
   left: auto;
 }
 
-.container {
-	display: inline-block;
-	margin-top: 60px;
-}
 
 app-router {
 	display: block;
-	margin-top: 60px;
-}
-
-core-scroll-header-panel {
-	height: 100%;
-}
-
-
-core-toolbar {
-	height: 60px;
-}
-
-#kaai {
-  z-index: 9999;
+  height: 100%;
+  background-color: #219dc8;
 }
