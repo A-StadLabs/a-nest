@@ -17,15 +17,7 @@ h2 {
 paper-button {
 	background: #ff8d00;
 	color: white;
-}
-
-paper-input-decorator /deep/ ::-webkit-input-placeholder {
-	color: white;
-}
-
-paper-input-decorator /deep/ .unfocused-underline {
-    /* line color when the input is unfocused */
-    background-color: white;
+	margin: 10px;
 }
 
 .avatar {

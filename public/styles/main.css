@@ -30,13 +30,11 @@ paper-toast {
   left: auto;
 }
 
-
 app-router {
 	display: block;
   height: 100%;
   background-color: #219dc8;
 }
-
 
 .avatar {
   width: 24px;
