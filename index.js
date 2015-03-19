@@ -22,15 +22,15 @@ app.use(express.static(__dirname + '/public'));
 
 // gewuun ne status update
 app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'));
+  //console.log("Node app is running at localhost:" + app.get('port'));
 });
 
 function sendsms(gsmnummer,body,cb){
- twilio.sendMessage({
-    to: gsmnummer,
-    from: '+32460202222',
-    body: body
-    },cb);
+ // twilio.sendMessage({
+ //    to: gsmnummer,
+ //    from: '+32460202222',
+ //    body: body
+ //    },cb);
 console.log('send sms to '+gsmnummer+' met code '+body);
 }
 
@@ -40,7 +40,7 @@ function findById(gsm, fn) {
     findUser.once("value", function(snapshot) {
       var code = Math.floor(Math.random() * 900000) + 100000;
       if(snapshot.val()){
-        console.log('ik heb een user gevonden: ', snapshot.key());
+        //console.log('ik heb een user gevonden: ', snapshot.key());
         var usergsm = snapshot.key();
         var setCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/"+gsm+"/");
         // update last login date
@@ -49,7 +49,7 @@ function findById(gsm, fn) {
         setCode.set(true);
         //sendsms(gsm, code);
       } else {
-        console.log('nu zou ik een nieuwe user aanmaken');
+        //console.log('nu zou ik een nieuwe user aanmaken');
         var createUser = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
         createUser.set({"gsm": gsm, "lastlogin": Firebase.ServerValue.TIMESTAMP});
         var setCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/"+gsm+"/");
@@ -61,24 +61,24 @@ function findById(gsm, fn) {
 }
 // exchange gsm+code for user
 function validateCode(gsm,code,fn){
-  console.log('validatecode '+ gsm + ','+code);
+  //console.log('validatecode '+ gsm + ','+code);
   var findCode = new Firebase("https://blazing-fire-6426.firebaseio.com/codes/"+code+"/");
     findCode.once("value", function(findcoderesult) {
       if(findcoderesult.val()){
         //console.log(snapshot.val());
         //res.send('ok ik heb een code voor '+gsm);
-        console.log('code gevonden voor ' + gsm);
+        //console.log('code gevonden voor ' + gsm);
         var getUser = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
         getUser.once("value", function(getuserresult) {
           //console.log(snapshot.val());
           //req.session.userobject = snapshot.val();
           //console.log(req.session.userobject);
-          console.log('userobject gevonden');
-          console.log(getuserresult.val());
+          //console.log('userobject gevonden');
+          //console.log(getuserresult.val());
           return fn(null,getuserresult.val());  
         }); 
       } else {
-        console.log('geen code gevonden');
+        //console.log('geen code gevonden');
         return fn(null,null);
 //        res.send('geen code gevonden.');
       }

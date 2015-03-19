@@ -63,7 +63,7 @@
 
     ready: function() {
      console.log('SMS Login app loaded.'); 
-     this.user = false;
+     //this.user = false;
      this.section = 0;
    },
 
@@ -82,8 +82,8 @@
       },
 
       handleResponseCheck: function(){
-        console.log(this.responseCheck);
-        if(!this.responseCheck.userstatus){
+        console.log(this.responseCheck.userstatus);
+        if(this.responseCheck.userstatus!='E'){
           this.user = true;
           this.section = 2;
         };
