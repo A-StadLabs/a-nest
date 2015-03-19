@@ -20,6 +20,17 @@ paper-button {
 }
 
 paper-input-decorator /deep/ ::-webkit-input-placeholder {
-    /* platform specific rules for placeholder text */
-    color: white;
+	color: white;
+}
+
+.avatar {
+	width: 60px;
+	height: 60px;
+	background-color: #eeeeee;
+	border-radius:50%;
+	border-color: white;
+	border-width: 2px;
+	border-style: solid;
+	margin: 0px 8px 0px 8px;
+	padding: 0px;
 }

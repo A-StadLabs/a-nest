@@ -5,15 +5,18 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
+<link href="../../bower_components/core-icons/core-icons.html" rel="import">
 <link rel="import" href="../../bower_components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="../../bower_components/core-animated-pages/transitions/slide-from-right.html">
 
 
 <polymer-element name="aos-smslogin" attributes="">
 
-<template>
+<template autobind>
 
   <link rel="stylesheet" href="aos-smslogin.css" />
+
+  <template if="{{user==false}}">
 
   <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right" fit>
   <section>
@@ -25,35 +28,45 @@
 
     <core-ajax method="GET" id="logout" handleAs="json" url="/logout" response="{{logoutresponse}}" on-core-response="{{handleLogout}}"></core-ajax>
     <div class="container">
-      <h2>Aanmelden / Registreren</h2>
+      <img src="/images/key.svg" class="avatar">
       <div>
       <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
-        <paper-input label="Jouw gsm nummer" id="input2" is="core-input" value="{{inputvalue}}" pattern="^[0-9].*"></paper-input>
+        <paper-input label="GSM #" id="input2" is="core-input" value="{{inputvalue}}" pattern="^[0-9].*"></paper-input>
       </div>
       <div>
-        <paper-button raised on-tap="{{validate}}">Verzenden</paper-button>
+        <paper-button raised on-tap="{{validate}}">
+        <core-icon icon="arrow-forward"></core-icon>
+        </paper-button>
       </div>
     </section>
     <section>
       <div class="container">
-
         <h2>Verifieer code</h2>
         <div>
           <paper-input label="Code" id="code" is="core-input" value="{{codevalue}}"></paper-input>
         </div>
         <div>
-          <paper-button raised on-tap="{{checkcode}}">Verzenden</paper-button>
+          <paper-button raised on-tap="{{checkcode}}">
+            <core-icon icon="arrow-forward"></core-icon>
+          </paper-button>
         </div>
       </div>
     </section>
+  </core-animated-pages>
+  </template>
+
+  <template if="{{user}}">
+  <core-animated-pages selected="0" transitions="" fit>
     <section>
       <div class="container">
         Ok, je bent aangemeld.<br />
         <paper-button raised on-tap="{{logout}}">Afmelden</paper-button>
       </div>
     </section>
+    <section></section>
+    <section></section>
   </core-animated-pages>
-
+  </template>
 
 </template>
 
@@ -62,53 +75,53 @@
   Polymer({
 
     ready: function() {
-     console.log('SMS Login app loaded.'); 
-     //this.user = false;
-     this.section = 0;
-   },
+      console.log('SMS Login app loaded.'); 
+      //this.user = false;
+      this.section = 0;
+      this.user = false;
+    },
 
-   validate: function() {
-    console.log(this.inputvalue);
-    var gsmnummer = this.inputvalue;
-    this.$.userCheck.params = { "gsm": gsmnummer };
+    validate: function() {
+      console.log(this.inputvalue);
+      var gsmnummer = this.inputvalue;
+      this.$.userCheck.params = { "gsm": gsmnummer };
         //this.$.loginAjax.params = { "username": "kingflurkel", "password": "mike48" };
         this.$.userCheck.go();
         this.section = 1;
-      },
+    },
 
-      handleResponseUserCheck: function(){
-        console.log(this.responseUser.code);
-        this.kode = this.responseUser.code;
-      },
+    handleResponseUserCheck: function(){
+      console.log(this.responseUser.code);
+      this.kode = this.responseUser.code;
+    },
 
-      handleResponseCheck: function(){
-        console.log(this.responseCheck.userstatus);
-        if(this.responseCheck.userstatus!='E'){
-          this.user = true;
-          this.section = 2;
-        };
-        console.log(this.user);
-      },
+    handleResponseCheck: function(){
+      console.log(this.responseCheck.userstatus);
+      if(this.responseCheck.userstatus!='E'){
+        this.user = true;
+        this.section = 2;
+      };
+      console.log(this.user);
+    },
 
-      checkcode: function(){
-        var code = this.codevalue;
-        var gsm = this.inputvalue;
-        this.$.codeCheck.params = { "kode": code, "gsm": gsm };
-        this.$.codeCheck.go();
-      },
+    checkcode: function(){
+      var code = this.codevalue;
+      var gsm = this.inputvalue;
+      this.$.codeCheck.params = { "kode": code, "gsm": gsm };
+      this.$.codeCheck.go();
+    },
 
-      handleResponseCodeCheck: function(){
-        console.log(this.responseCode);
-      },
+    handleResponseCodeCheck: function(){
+      console.log(this.responseCode);
+    },
 
-      logout: function(){
-        this.$.logout.go();
-        this.$.section = 0;
-      }
+    logout: function(){
+      this.$.logout.go();
+      this.user = false;
+      this.$.section = 0;
+    }
 
-
-
-    });
+});
 
 </script>
 
