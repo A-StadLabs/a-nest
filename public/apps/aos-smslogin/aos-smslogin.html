@@ -12,21 +12,22 @@
 
 <polymer-element name="aos-smslogin" attributes="">
 
-<template autobind>
+<template>
 
   <link rel="stylesheet" href="aos-smslogin.css" />
 
-  <template if="{{user==false}}">
-
-  <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right" fit>
-  <section>
-    <core-ajax method="GET" id="checkUser" handleAs="json" url="/user" response="{{responseCheck}}" on-core-response="{{handleResponseCheck}}" auto></core-ajax>
+  <core-ajax method="GET" id="checkUser" handleAs="json" url="/user" response="{{responseCheck}}" on-core-response="{{handleResponseCheck}}" auto></core-ajax>
 
     <core-ajax method="GET" id="userCheck" handleAs="json" url="/usercheck" response="{{responseUser}}" on-core-response="{{handleResponseUserCheck}}"></core-ajax>
 
     <core-ajax method="GET" id="codeCheck" handleAs="json" url="/codecheck" response="{{responseCode}}" on-core-response="{{handleResponseCodeCheck}}"></core-ajax>
 
     <core-ajax method="GET" id="logout" handleAs="json" url="/logout" response="{{logoutresponse}}" on-core-response="{{handleLogout}}"></core-ajax>
+
+  <template if="{{user==false}}">
+
+  <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right" fit>
+  <section>
     <div class="container">
       <img src="/images/key.svg" class="avatar">
       <div>
@@ -113,6 +114,7 @@
 
     handleResponseCodeCheck: function(){
       console.log(this.responseCode);
+      this.user = true;
     },
 
     logout: function(){

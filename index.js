@@ -26,12 +26,13 @@ app.listen(app.get('port'), function() {
 });
 
 function sendsms(gsmnummer,body,cb){
- // twilio.sendMessage({
- //    to: gsmnummer,
- //    from: '+32460202222',
- //    body: body
- //    },cb);
-console.log('send sms to '+gsmnummer+' met code '+body);
+  // twilio.sendMessage({
+  //   to: gsmnummer,
+  //   from: '+32460202222',
+  //   body: body
+  // },cb);
+
+  console.log('send sms to '+gsmnummer+' met code '+body);
 }
 
 // exchange GSM number (parameter id ) for a custom code
