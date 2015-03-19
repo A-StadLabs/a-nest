@@ -1,6 +1,10 @@
 {
 	"twilio": {
 		"ACCOUNT_SID" : "xxx",
-		"AUTH_TOKEN" : "xxx"
+		"AUTH_TOKEN" : "xxx",
+		"simulationmode": false
+	},
+	"firebase":{
+		"baseurl" : ""
 	}
 }
