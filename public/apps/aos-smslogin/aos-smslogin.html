@@ -32,7 +32,10 @@
       <img src="/images/key.svg" class="avatar">
       <div>
       <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
-        <paper-input label="GSM #" id="input2" is="core-input" value="{{inputvalue}}" pattern="^[0-9].*"></paper-input>
+      <paper-input label="GSM #" id="input2" is="core-input" value="{{inputvalue}}" pattern="^[0-9].*"></paper-input>
+      <paper-input-decorator floatingLabel label="GSM #">
+        <input is="core-input">
+      </paper-input-decorator>
       </div>
       <div>
         <paper-button raised on-tap="{{validate}}">
