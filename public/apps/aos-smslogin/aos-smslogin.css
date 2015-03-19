@@ -19,8 +19,13 @@ paper-button {
 	color: white;
 }
 
-paper-input-decorator /deep/ ::-webkit-input-placeholder {
+paper-input /deep/ ::-webkit-input-placeholder {
 	color: white;
+}
+
+paper-input /deep/ .unfocused-underline {
+    /* line color when the input is unfocused */
+    background-color: white;
 }
 
 .avatar {
