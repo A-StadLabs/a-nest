@@ -1,0 +1,6 @@
+{
+	"twilio": {
+		"ACCOUNT_SID" : "xxx",
+		"AUTH_TOKEN" : "xxx"
+	}
+}
