@@ -31,3 +31,8 @@ paper-button {
 	margin: 0px 8px 0px 8px;
 	padding: 0px;
 }
+
+.input {
+	height: 30px;
+	background-color: green;
+}
