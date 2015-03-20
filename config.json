@@ -1,8 +1,7 @@
 {
 	"twilio": {
 		"ACCOUNT_SID": "ACb03474328bef2977709d183b114397e6",
-		"AUTH_TOKEN": "ac8b0b530c07485c4a50af262248624c"//,
-		//"simulationmode": false
+		"AUTH_TOKEN": "ac8b0b530c07485c4a50af262248624c"
 	},
 	"firebase":{
 		"baseurl" : "https://blazing-fire-6426.firebaseio.com"
