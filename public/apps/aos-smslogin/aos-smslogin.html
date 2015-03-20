@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../elements/aos-globals/aos-globals.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/core-input/core-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
@@ -27,18 +27,16 @@
 
   <template if="{{user==false}}">
 
-  <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right" fit>
+  <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right">
   <section>
-    <div class="container">
+  <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
+    <div class="container" vertical layout center>
       <img src="/images/key.svg" class="avatar">
+
       <div>
-      <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
-      <paper-input label="GSM #" id="input2" is="core-input" value="{{inputvalue}}" pattern="^[0-9].*"></paper-input>
-      <paper-input-decorator floatingLabel label="GSM #">
-        <input is="core-input">
-      </paper-input-decorator>
-      </div>
-      <div>
+          <paper-input label="GSM" id="input2" is="core-input" value="{{inputvalue}}"></paper-input>
+        </div>
+     
         <paper-button raised on-tap="{{validate}}">
         <core-icon icon="arrow-forward"></core-icon>
         </paper-button>
@@ -61,15 +59,36 @@
   </template>
 
   <template if="{{user}}">
-  <core-animated-pages selected="0" transitions="" fit>
+  <core-animated-pages selected="{{sect_number}}" transitions="" flex>
     <section>
-      <div class="container">
-        Ok, je bent aangemeld.<br />
-        <paper-button raised on-tap="{{logout}}">Afmelden</paper-button>
+    <core-toolbar>
+        <div flex>{{gsm}}</div>
+        <core-icon-button icon="receipt"></core-icon-button>
+        <core-icon-button icon="apps"></core-icon-button>
+        <core-icon-button icon="settings"></core-icon-button>
+      </core-toolbar>
+      <div class="container" vertical layout center>
+        <div><paper-button raised on-tap="{{ navigate }}">Me</paper-button></div>
+        <div><paper-button raised>Notifications</paper-button></div>
+        <div><paper-button raised>Verification</paper-button></div>
+        <div>Grid to other apps</div>
+        <div><paper-button raised on-tap="{{logout}}">Logout</paper-button></div>
       </div>
     </section>
-    <section></section>
-    <section></section>
+    <section id="sect_me">
+      <core-toolbar>
+        <core-icon-button icon="settings"></core-icon-button>
+      </core-toolbar>
+      <div vertical layout class="container">
+        <div>Hallo!</div>
+      </div>
+    </section>
+    <section id="sect_notifications">
+      
+    </section>
+    <section id="sect_verification">
+      
+    </section>
   </core-animated-pages>
   </template>
 
@@ -101,10 +120,12 @@
     },
 
     handleResponseCheck: function(){
-      console.log(this.responseCheck.userstatus);
+      console.log(this.responseCheck);
       if(this.responseCheck.userstatus!='E'){
         this.user = true;
-        this.section = 2;
+
+        this.gsm = this.responseCheck.gsm;
+        //this.section = 2;
       };
       console.log(this.user);
     },
@@ -114,6 +135,7 @@
       var gsm = this.inputvalue;
       this.$.codeCheck.params = { "kode": code, "gsm": gsm };
       this.$.codeCheck.go();
+      this.gsm = gsm;
     },
 
     handleResponseCodeCheck: function(){
@@ -125,6 +147,10 @@
       this.$.logout.go();
       this.user = false;
       this.$.section = 0;
+    },
+
+    navigate: function(){
+      this.sect_number = 1;
     }
 
 });
