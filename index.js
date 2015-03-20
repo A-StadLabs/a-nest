@@ -4,7 +4,7 @@ var app = express();
 var request = require('request');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
-var config = require('./config.json');
+var config = require('./lib/config');
 // load services from seperate files
 var twilio = require('./lib/services/twilio');
 var gsmcode = require('./lib/services/gsmcode');
