@@ -19,7 +19,7 @@
     "twilio": "^1.11.1"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "npm start"
   },
   "engines": {
     "node": "0.10.x"
