@@ -11,5 +11,5 @@ Then edit config.json and fill in your account details for the SMS provider & Fi
 ##Running
 
 
-``npm start``
+``gulp serve``
 
