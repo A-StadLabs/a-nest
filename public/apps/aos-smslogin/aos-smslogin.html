@@ -20,78 +20,78 @@
 
   <core-ajax method="GET" id="checkUser" handleAs="json" url="/user" response="{{responseCheck}}" on-core-response="{{handleResponseCheck}}" auto></core-ajax>
 
-    <core-ajax method="GET" id="userCheck" handleAs="json" url="/usercheck" response="{{responseUser}}" on-core-response="{{handleResponseUserCheck}}"></core-ajax>
+  <core-ajax method="GET" id="userCheck" handleAs="json" url="/usercheck" response="{{responseUser}}" on-core-response="{{handleResponseUserCheck}}"></core-ajax>
 
-    <core-ajax method="GET" id="codeCheck" handleAs="json" url="/codecheck" response="{{responseCode}}" on-core-response="{{handleResponseCodeCheck}}"></core-ajax>
+  <core-ajax method="GET" id="codeCheck" handleAs="json" url="/codecheck" response="{{responseCode}}" on-core-response="{{handleResponseCodeCheck}}"></core-ajax>
 
-    <core-ajax method="GET" id="logout" handleAs="json" url="/logout" response="{{logoutresponse}}" on-core-response="{{handleLogout}}"></core-ajax>
+  <core-ajax method="GET" id="logout" handleAs="json" url="/logout" response="{{logoutresponse}}" on-core-response="{{handleLogout}}"></core-ajax>
 
   <template if="{{user==false}}">
 
-  <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right">
-  <section>
-  <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
-    <div class="container" vertical layout center>
-      <img src="/images/key.svg" class="avatar">
+    <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right">
+    <section>
+      <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
+      <div class="container" vertical layout center>
+        <img src="/images/key.svg" class="avatar">
 
-      <div>
+        <div>
           <input type="text" is="core-input" label="GSM" id="input2" is="core-input" value="{{inputvalue}}" class="input" autofocus>
         </div>
-     
+        
         <paper-button raised on-tap="{{validate}}">
         <core-icon icon="arrow-forward"></core-icon>
-        </paper-button>
+      </paper-button>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <h2>Verifieer code</h2>
+      <div>
+        <paper-input autofocus label="Code" id="code" is="core-input" value="{{codevalue}}"></paper-input>
       </div>
-    </section>
-    <section>
-      <div class="container">
-        <h2>Verifieer code</h2>
-        <div>
-          <paper-input autofocus label="Code" id="code" is="core-input" value="{{codevalue}}"></paper-input>
-        </div>
-        <div>
-          <paper-button raised on-tap="{{checkcode}}">
-            <core-icon icon="arrow-forward"></core-icon>
-          </paper-button>
-        </div>
-      </div>
-    </section>
-  </core-animated-pages>
-  </template>
+      <div>
+        <paper-button raised on-tap="{{checkcode}}">
+        <core-icon icon="arrow-forward"></core-icon>
+      </paper-button>
+    </div>
+  </div>
+</section>
+</core-animated-pages>
+</template>
 
-  <template if="{{user}}">
+<template if="{{user}}">
   <core-animated-pages selected="{{sect_number}}" transitions="" flex>
-    <section>
+  <section>
     <core-toolbar>
-        <div flex>{{gsm}}</div>
-        <core-icon-button icon="receipt"></core-icon-button>
-        <core-icon-button icon="apps"></core-icon-button>
-        <core-icon-button icon="settings"></core-icon-button>
-      </core-toolbar>
-      <div class="container" vertical layout center>
-        <div><paper-button raised on-tap="{{ navigate }}">Me</paper-button></div>
-        <div><paper-button raised>Notifications</paper-button></div>
-        <div><paper-button raised>Verification</paper-button></div>
-        <div>Grid to other apps</div>
-        <div><paper-button raised on-tap="{{logout}}">Logout</paper-button></div>
-      </div>
-    </section>
-    <section id="sect_me">
-      <core-toolbar>
-        <core-icon-button icon="settings"></core-icon-button>
-      </core-toolbar>
-      <div vertical layout class="container">
-        <div>Hallo!</div>
-      </div>
-    </section>
-    <section id="sect_notifications">
-      
-    </section>
-    <section id="sect_verification">
-      
-    </section>
-  </core-animated-pages>
-  </template>
+    <div flex>{{gsm}}</div>
+    <core-icon-button icon="receipt"></core-icon-button>
+    <core-icon-button icon="apps"></core-icon-button>
+    <core-icon-button icon="settings"></core-icon-button>
+  </core-toolbar>
+  <div class="container" vertical layout center>
+    <div><paper-button raised on-tap="{{ navigate }}">Me</paper-button></div>
+    <div><paper-button raised>Notifications</paper-button></div>
+    <div><paper-button raised>Verification</paper-button></div>
+    <div>Grid to other apps</div>
+    <div><paper-button raised on-tap="{{logout}}">Logout</paper-button></div>
+  </div>
+</section>
+<section id="sect_me">
+  <core-toolbar>
+  <core-icon-button icon="settings"></core-icon-button>
+</core-toolbar>
+<div vertical layout class="container">
+  <div>Hallo!</div>
+</div>
+</section>
+<section id="sect_notifications">
+  
+</section>
+<section id="sect_verification">
+  
+</section>
+</core-animated-pages>
+</template>
 
 </template>
 
@@ -113,19 +113,19 @@
         //this.$.loginAjax.params = { "username": "kingflurkel", "password": "mike48" };
         this.$.userCheck.go();
         this.section = 1;
-    },
+      },
 
-    handleResponseUserCheck: function(){
-      console.log(this.responseUser.code);
-      this.kode = this.responseUser.code;
-    },
+      handleResponseUserCheck: function(){
+        console.log(this.responseUser.code);
+        this.kode = this.responseUser.code;
+      },
 
-    handleResponseCheck: function(){
-      console.log(this.responseCheck);
-      if(this.responseCheck.userstatus!='E'){
-        this.user = true;
+      handleResponseCheck: function(){
+        console.log(this.responseCheck);
+        if(this.responseCheck.userstatus!='E'){
+          this.user = true;
 
-        this.gsm = this.responseCheck.gsm;
+          this.gsm = this.responseCheck.gsm;
         //this.section = 2;
       };
       console.log(this.user);
@@ -154,7 +154,7 @@
       this.sect_number = 1;
     }
 
-});
+  });
 
 </script>
 
