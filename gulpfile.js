@@ -6,9 +6,6 @@ var nodemon = require('gulp-nodemon');
 var sass = require('gulp-sass');
 var ngrok = require('ngrok');
 
-
-
-
 gulp.task('default', ['serve'], function () {
 });
 

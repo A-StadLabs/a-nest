@@ -1,13 +1,105 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link href="../../../../bower_components/app-router/app-router.html" rel="import">
+<link rel="import" href="../../../../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../../../../bower_components/core-animated-pages/transitions/slide-from-right.html">
+<link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
+
+<link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
+
+<link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
 
 <polymer-element name="a-nest" attributes="">
-  <template>
-    <link rel="stylesheet" href="../../styles/css/style.css" />
-    <h1>kiki sschtank maar niet zo hard</h1>
+<template>
+	<link rel="stylesheet" href="../../styles/css/style.css" />
+	<core-drawer-panel>
+	<div drawer>
+		drawer shit
+		<div>
+			<a href="#/" horizontal layout center-center>
+				<img class="bottom-icon" src="../../../../images/anest-profile.svg">
+			</a>
+		</div>
+		<div>
+			<a href="#/knooppunt" horizontal layout center-center>
+				<img class="bottom-icon" src="../../../../images/anest-knooppunt.svg">
+			</a>
+		</div>
+		<div>
+			<a href="#/settings" horizontal layout center-center>
+				<img class="bottom-icon" src="../../../../images/anest-settings.svg">
+			</a>
+		</div>
+	</div>
+	<div main>
+		<app-router fit id="router" mode="hash" core-animated-pages transitions="slide-from-right">
+			<app-route path="/">
+				<core-scroll-header-panel flex condenses>
+					<core-toolbar>
+					<core-icon-button icon="menu" core-drawer-toggle></core-icon-button>
+					<!-- en hier dus eerst de kop in 't groot en als je scrollt verscdhuift de kop naar rechtsboven / hero anim -->
+					</core-toolbar>
+					<div main>
+						<firebase-element ></firebase-element>
+						<!-- een voorbeeld van een notificatie -->
+						<div class="kaartje">
+							<h3>Groenegevel subsidie</h3>
+							<p>Wist je dat jij recht hebt op een groene gevel subsidie?</p>
+							<button>Ik wil da</button><button>Niet geinteresseerd</button>
+						</div>
+						<!-- een voorbeeld van een notificatie -->
+						<div class="kaartje">
+							<h3>Zwembad Wezenberg gesloten</h3>
+							<p>Vrijdag 27 maart zal zwembad Wezenberg voor 1 dag de deuren sluiten voor onderhoud.</p>
+							<button>Remind me</button><button>Niet geinteresseerd</button>
+						</div>
+						<!-- een voorbeeld van een notificatie -->
+						<div class="kaartje">
+							<h3>Groenegevel subsidie</h3>
+							<p>Wist je dat jij recht hebt op een groene gevel subsidie?</p>
+							<button>Ik wil da</button><button>Niet geinteresseerd</button>
+						</div>
+						<!-- een voorbeeld van een notificatie -->
+						<div class="kaartje">
+							<h3>Zwembad Wezenberg gesloten</h3>
+							<p>Vrijdag 27 maart zal zwembad Wezenberg voor 1 dag de deuren sluiten voor onderhoud.</p>
+							<button>Remind me</button><button>Niet geinteresseerd</button>
+						</div>
+						<!-- een voorbeeld van een notificatie -->
+						<div class="kaartje">
+							<h3>Groenegevel subsidie</h3>
+							<p>Wist je dat jij recht hebt op een groene gevel subsidie?</p>
+							<button>Ik wil da</button><button>Niet geinteresseerd</button>
+						</div>
+						<!-- een voorbeeld van een notificatie -->
+						<div class="kaartje">
+							<h3>Zwembad Wezenberg gesloten</h3>
+							<p>Vrijdag 27 maart zal zwembad Wezenberg voor 1 dag de deuren sluiten voor onderhoud.</p>
+							<button>Remind me</button><button>Niet geinteresseerd</button>
+						</div> 
+					</div>
+				</core-scroll-header-panel>
+			</app-route>
+			<app-route path="/knooppunt">
+				<template>
+					<div>GRID</div>
+				</template>
+			</app-route>
+			<app-route path="/settings">
+				<template>
+					<div>Settings</div>
+				</template>
+			</app-route>
+		</app-router>
+	</div>
+	</core-drawer-panel>
 </template>
 <script>
-    Polymer({
+	Polymer({
+		ready: function() {
+			this.selected = this.$.router.activeRoute.getAttribute('path');
+		},
 
-    });
+
+	});
 </script>
 </polymer-element>

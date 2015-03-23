@@ -1,2 +1,16 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif; }
+
+core-scroll-header-panel {
+  height: 100%; }
+
 h1 {
-  color: #569C90; }
+  color: #333333;
+  font-weight: 300; }
+
+.kaartje {
+  margin: 20px;
+  padding: 20px;
+  background-color: white; }
