@@ -1,6 +1,6 @@
 
 (function(document) {
-  'use strict';
+  //'use strict';
 
 
   var that = this;

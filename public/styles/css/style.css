@@ -1,10 +1,27 @@
 html, body {
   height: 100%;
   margin: 0;
-  font-family: 'Open Sans', sans-serif; }
+  font-family: 'Open Sans', sans-serif;
+  background-color: #219dc8; }
+
+core-toolbar {
+  background-color: #219dc8; }
 
 core-scroll-header-panel {
   height: 100%; }
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  background-color: #eeeeee;
+  border-radius: 50%;
+  border-color: white;
+  border-width: 2px;
+  border-style: solid;
+  margin: 0px 8px 0px 8px; }
+
+[drawer] {
+  background-color: #219dc8; }
 
 h1 {
   color: #333333;

@@ -6,6 +6,24 @@
     "paper-elements": "Polymer/paper-elements#~0.5.5",
     "core-elements": "Polymer/core-elements#~0.5.5",
     "firebase-element": "Polymer/firebase-element#~0.5.5",
-    "app-router": "~2.6.0"
+    "app-router": "~2.6.0",
+    "paper-card": "PolymerLabs/paper-card"
+  },
+  "resolutions": {
+    "core-component-page": "^0.5",
+    "polymer": "~0.5.5",
+    "webcomponentsjs": "^0.5",
+    "font-roboto": "master",
+    "core-icons": "master",
+    "core-icon": "master",
+    "core-iconset": "master",
+    "core-meta": "master",
+    "core-iconset-svg": "master",
+    "core-icon-button": "master",
+    "paper-button": "master",
+    "core-a11y-keys": "master",
+    "core-focusable": "master",
+    "paper-ripple": "master",
+    "paper-shadow": "master"
   }
 }

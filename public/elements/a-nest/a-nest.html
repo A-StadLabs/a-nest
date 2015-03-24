@@ -3,14 +3,23 @@
 <link rel="import" href="../../../../bower_components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="../../../../bower_components/core-animated-pages/transitions/slide-from-right.html">
 <link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
-
+<link rel="import" href="../../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
-
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../../bower_components/firebase-element/firebase-element.html">
+
+<link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
 
 <polymer-element name="a-nest" attributes="">
 <template>
 	<link rel="stylesheet" href="../../styles/css/style.css" />
+	<core-ajax
+  auto
+  url="/user"
+  handleAs="json"
+  response="{{response}}"
+  on-core-response="{{handleResponse}}"></core-ajax>
+	<template if="{{user}}">
 	<core-drawer-panel>
 	<div drawer>
 		drawer shit
@@ -39,43 +48,29 @@
 					<!-- en hier dus eerst de kop in 't groot en als je scrollt verscdhuift de kop naar rechtsboven / hero anim -->
 					</core-toolbar>
 					<div main>
-						<firebase-element ></firebase-element>
+						<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/"  on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
+						<div vertical layout center>
+							<img src="../../../../images/avatar.png" class="avatar">
+							<h3>King Flurkel</h3>
+						</div>
 						<!-- een voorbeeld van een notificatie -->
-						<div class="kaartje">
-							<h3>Groenegevel subsidie</h3>
-							<p>Wist je dat jij recht hebt op een groene gevel subsidie?</p>
+						<button on-tap="{{genCards}}">Geef me kaartjes</button>
+						<div id="cards">
+						<template repeat="{{ i in cards }}">
+						<paper-card heading="{{i.title}}" z="2" class="kaartje" on-swipeable-card-swipe-away="{{demo}}" cardid="{{i.key}}">
+						  <div content>{{i.body}}</div>
+						  <div actions>
+						    <paper-button dismissive>Some action</paper-button>
+						  </div actions>
+						</paper-card>
+						<!-- <div class="kaartje">
+							<h3>{{data[i].title}}</h3>
+							<p>{{data[i].body}}</p>
+							<a href="{{data[i].url}}">Meer info</a><br />
 							<button>Ik wil da</button><button>Niet geinteresseerd</button>
+						</div> -->
+						</template>
 						</div>
-						<!-- een voorbeeld van een notificatie -->
-						<div class="kaartje">
-							<h3>Zwembad Wezenberg gesloten</h3>
-							<p>Vrijdag 27 maart zal zwembad Wezenberg voor 1 dag de deuren sluiten voor onderhoud.</p>
-							<button>Remind me</button><button>Niet geinteresseerd</button>
-						</div>
-						<!-- een voorbeeld van een notificatie -->
-						<div class="kaartje">
-							<h3>Groenegevel subsidie</h3>
-							<p>Wist je dat jij recht hebt op een groene gevel subsidie?</p>
-							<button>Ik wil da</button><button>Niet geinteresseerd</button>
-						</div>
-						<!-- een voorbeeld van een notificatie -->
-						<div class="kaartje">
-							<h3>Zwembad Wezenberg gesloten</h3>
-							<p>Vrijdag 27 maart zal zwembad Wezenberg voor 1 dag de deuren sluiten voor onderhoud.</p>
-							<button>Remind me</button><button>Niet geinteresseerd</button>
-						</div>
-						<!-- een voorbeeld van een notificatie -->
-						<div class="kaartje">
-							<h3>Groenegevel subsidie</h3>
-							<p>Wist je dat jij recht hebt op een groene gevel subsidie?</p>
-							<button>Ik wil da</button><button>Niet geinteresseerd</button>
-						</div>
-						<!-- een voorbeeld van een notificatie -->
-						<div class="kaartje">
-							<h3>Zwembad Wezenberg gesloten</h3>
-							<p>Vrijdag 27 maart zal zwembad Wezenberg voor 1 dag de deuren sluiten voor onderhoud.</p>
-							<button>Remind me</button><button>Niet geinteresseerd</button>
-						</div> 
 					</div>
 				</core-scroll-header-panel>
 			</app-route>
@@ -92,13 +87,68 @@
 		</app-router>
 	</div>
 	</core-drawer-panel>
+	</template>
+	<template if="{{!user}}">
+		<aos-smslogin></aos-smslogin>
+	</template>
 </template>
 <script>
 	Polymer({
 		ready: function() {
 			this.selected = this.$.router.activeRoute.getAttribute('path');
+			this.user = false;
 		},
 
+		handleResponse: function(){
+      		console.log(this.response);
+      		if(this.response.userstatus=="E"){
+        		console.log('User not logged in');
+        		this.user = false;
+      		} else {
+        		console.log('got user', this.response);
+        		this.user = true;
+        		this.gsm = this.response.gsm;
+      		}
+    	},
+
+    	demo: function(e){
+    		
+    		e.target.parentNode.removeChild(e.target);
+    		// set card to read
+    		var gsm = this.gsm;
+    		var cardid = e.target.getAttribute('cardid');
+    		var readCard = new Firebase("https://blazing-fire-6426.firebaseio.com/cards/"+gsm+"/"+cardid+"/read/");
+    		readCard.set(true);
+    	},
+
+    	genCards: function(){
+    		console.log(this.gsm);
+    		var gsm = this.gsm;
+    		var genCards = new Firebase("https://blazing-fire-6426.firebaseio.com/cards/"+gsm+"/");
+    		genCards.push({"title":"Groene gevel premie", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
+    		genCards.push({"title":"Kabouterbos niet bereikbaar", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
+    		genCards.push({"title":"Maak van jouw straat een speelstraat", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
+    	},
+
+    	getCards: function(){
+    		console.log('card reshuffle');
+    		var data = this.data;
+    		var keys = this.keys;
+    		var cards = [];
+    		for (var i = keys.length - 1; i >= 0; i--) {
+    			console.log(this.data[keys[i]]);
+    			if(!this.data[keys[i]].read){
+    			cards.push({"title": this.data[keys[i]].title, 
+    						"body": this.data[keys[i]].body,
+    						"url": this.data[keys[i]].url,
+    						"type": this.data[keys[i]].type,
+    						"key": keys[i],
+    						"read": this.data[keys[i]].read})
+    			};
+    		};
+    		console.log("cards: ", cards);
+    		this.cards = cards;
+    	}
 
 	});
 </script>

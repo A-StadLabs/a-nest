@@ -10,15 +10,32 @@ $light: 300;
 html, body {
   height: 100%;
   margin: 0;
-    	font-family: $mainfont;
-
+  font-family: $mainfont;
+  background-color: $classicblue;
 }
 
+core-toolbar {
+	 background-color: $classicblue;
+}
 
 core-scroll-header-panel {
   height: 100%;
 }
 
+.avatar {
+	width: 100px;
+	height: 100px;
+	background-color: #eeeeee;
+	border-radius:50%;
+	border-color: white;
+	border-width: 2px;
+	border-style: solid;
+	margin: 0px 8px 0px 8px;
+}
+
+[drawer] {
+  background-color: $classicblue;
+}
 
 // core-scroll-header-panel {
 //   height: 100%;

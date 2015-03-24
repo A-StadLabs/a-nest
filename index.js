@@ -27,9 +27,9 @@ app.get('/usercheck', function(req, res) {
   gsmcode.createCode(searchstring, function(err, code) {
     twilio.sendsms(searchstring, 'Je code is ' + code, function(err) {
       if (err) {
-        console.log(err);
+        console.log('code: ', code, err);
       } else {
-        console.log('sms sent to ' + searchstring);
+        console.log(code+ ' sms sent to ' + searchstring);
       }
     });
     res.send({
