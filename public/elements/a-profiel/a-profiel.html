@@ -1,0 +1,68 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+
+<polymer-element name="a-profiel" attributes="">
+  <template>
+    <link rel="stylesheet" href="a-profiel.css" />
+    <core-toolbar>
+		<core-icon-button icon="arrow-back" on-tap="{{goHome}}"></core-icon-button>
+		<span flex></span>
+	</core-toolbar>
+	<div vertical layout>
+	<div class="gezicht">
+		<div id="basisgezicht" class="fixit">
+			<img src="{{gezicht}}">
+		</div>
+		<div id="snit" class="fixit">
+			<img src="{{snit}}">
+		</div>
+		<div id="oogaccessoire" class="fixit">
+			<img src="{{oogacc}}">
+		</div>
+		<div id="snor" class="fixit">
+			
+		</div>
+		<div id="baard" class="fixit">
+			
+		</div>
+	</div>
+	
+	</div>
+	
+	<div>
+	<template repeat="{{i in snitten}}">
+		<img src="{{i.src}}" on-tap="{{selectSnit}}" key="{{i.id}}" width="80" height="80">
+	</template>
+	</div>
+	
+	<div>
+	<template repeat="{{i in gezichten}}">
+		<img src="{{i.src}}" key="{{i.id}}" width="80" height="80">
+	</template>
+	</div>
+</template>
+<script>
+    Polymer({
+    	goHome: function(){
+    		this.fire("router-go", { naarwaar: "/home" });
+    	},
+
+    	ready: function(){
+    		this.gezicht = "../../../../images/nestheads-DEFAULT-01.svg";
+    		this.snit = "../../../../images/nestheads-SNIT2.svg";
+    		this.oogacc = "../../../../images/nestheads-GLASSES.svg";
+    		this.snor = "";
+    		this.baard = "";
+
+    		this.gezichten = [{"id": 1, "src": "../../../../images/nestheads-DEFAULT-01.svg"},{"id": 2, "src": "../../../../images/nestheads-DEFAULT-01.svg"},{"id": 3, "src": "../../../../images/nestheads-DEFAULT-01.svg"}];
+    		this.snitten = [{"id": 1, "src": "../../../../images/nestheads-SNIT1.svg"},{"id": 1, "src": "../../../../images/nestheads-SNIT2.svg"},{"id": 1, "src": "../../../../images/nestheads-SNIT3.svg"}];
+    	},
+
+    	selectSnit: function(e){
+    		var key = e.target.getAttribute('src');
+    		console.log(key);
+    		this.snit = key;
+    	}
+    });
+
+</script>
+</polymer-element>

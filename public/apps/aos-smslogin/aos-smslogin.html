@@ -88,7 +88,7 @@
         console.log(this.responseCheck);
         if(this.responseCheck.userstatus!='E'){
           this.user = true;
-
+          this.fire("router-go", { naarwaar: '/home' });
           this.gsm = this.responseCheck.gsm;
         //this.section = 2;
       };

@@ -1,5 +1,4 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
-<link href="../../../../bower_components/app-router/app-router.html" rel="import">
 <link rel="import" href="../../../../bower_components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="../../../../bower_components/core-animated-pages/transitions/slide-from-right.html">
 <link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
@@ -7,113 +6,91 @@
 <link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../../bower_components/firebase-element/firebase-element.html">
+<link href="../../../../bower_components/app-router/app-router.html" rel="import">
 
 <link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
 
 <polymer-element name="a-nest" attributes="">
 <template>
 	<link rel="stylesheet" href="../../styles/css/style.css" />
+
 	<core-ajax
-  auto
-  url="/user"
-  handleAs="json"
-  response="{{response}}"
-  on-core-response="{{handleResponse}}"></core-ajax>
-	<template if="{{user}}">
-	<core-drawer-panel>
-	<div drawer>
-		drawer shit
-		<div>
-			<a href="#/" horizontal layout center-center>
-				<img class="bottom-icon" src="../../../../images/anest-profile.svg">
-			</a>
-		</div>
-		<div>
-			<a href="#/knooppunt" horizontal layout center-center>
-				<img class="bottom-icon" src="../../../../images/anest-knooppunt.svg">
-			</a>
-		</div>
-		<div>
-			<a href="#/settings" horizontal layout center-center>
-				<img class="bottom-icon" src="../../../../images/anest-settings.svg">
-			</a>
-		</div>
+	auto
+	url="/user"
+	handleAs="json"
+	response="{{response}}"
+	on-core-response="{{handleResponse}}">
+</core-ajax>
+
+<core-scroll-header-panel>
+<core-toolbar>
+<span flex></span>
+<core-icon-button icon="exit-to-app" core-drawer-toggle></core-icon-button>
+</core-toolbar>
+
+<div>
+	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/"  on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
+	<div vertical layout center on-tap="{{goProfile}}" hero-id="hero" hero>
+		<img src="../../../../images/avatar.png" class="avatar">
+		<h3>King Flurkel</h3>
+		<core-icon-button icon="lock-open" core-drawer-toggle></core-icon-button>
 	</div>
-	<div main>
-		<app-router fit id="router" mode="hash" core-animated-pages transitions="slide-from-right">
-			<app-route path="/">
-				<core-scroll-header-panel flex condenses>
-					<core-toolbar>
-					<core-icon-button icon="menu" core-drawer-toggle></core-icon-button>
-					<!-- en hier dus eerst de kop in 't groot en als je scrollt verscdhuift de kop naar rechtsboven / hero anim -->
-					</core-toolbar>
-					<div main>
-						<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/"  on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
-						<div vertical layout center>
-							<img src="../../../../images/avatar.png" class="avatar">
-							<h3>King Flurkel</h3>
-						</div>
-						<!-- een voorbeeld van een notificatie -->
-						<button on-tap="{{genCards}}">Geef me kaartjes</button>
-						<div id="cards">
-						<template repeat="{{ i in cards }}">
-						<paper-card heading="{{i.title}}" z="2" class="kaartje" on-swipeable-card-swipe-away="{{demo}}" cardid="{{i.key}}">
-						  <div content>{{i.body}}</div>
-						  <div actions>
-						    <paper-button dismissive>Some action</paper-button>
-						  </div actions>
-						</paper-card>
-						<!-- <div class="kaartje">
-							<h3>{{data[i].title}}</h3>
-							<p>{{data[i].body}}</p>
-							<a href="{{data[i].url}}">Meer info</a><br />
-							<button>Ik wil da</button><button>Niet geinteresseerd</button>
-						</div> -->
-						</template>
-						</div>
-					</div>
-				</core-scroll-header-panel>
-			</app-route>
-			<app-route path="/knooppunt">
-				<template>
-					<div>GRID</div>
-				</template>
-			</app-route>
-			<app-route path="/settings">
-				<template>
-					<div>Settings</div>
-				</template>
-			</app-route>
-		</app-router>
-	</div>
-	</core-drawer-panel>
+	<!-- een voorbeeld van een notificatie -->
+	<div vertical layout center id="cards">
+		<template repeat="{{ i in cards }}">
+			<paper-card animated="true" heading="{{i.title}}" z="2" class="kaartje" on-swipeable-card-swipe-away="{{demo}}" image="{{i.image}}" cardid="{{i.key}}">
+			<div content>{{i.body}}</div>
+			<div actions>
+				<paper-button dismissive>Some action</paper-button>
+			</div actions>
+		</paper-card>
+
 	</template>
-	<template if="{{!user}}">
-		<aos-smslogin></aos-smslogin>
-	</template>
+</div>
+<div vertical layout center>
+	<button on-tap="{{genCards}}">Geef me kaartjes</button>
+</div>
+</div>
+</core-scroll-header-panel>
 </template>
 <script>
 	Polymer({
 		ready: function() {
-			this.selected = this.$.router.activeRoute.getAttribute('path');
+			//this.selected = "/home";
 			this.user = false;
+			this.firstuse = true;
+		},
+
+		routeSelectedChanged: function(){
+			console.log(this.routeSelected);
 		},
 
 		handleResponse: function(){
-      		console.log(this.response);
-      		if(this.response.userstatus=="E"){
-        		console.log('User not logged in');
-        		this.user = false;
-      		} else {
-        		console.log('got user', this.response);
-        		this.user = true;
-        		this.gsm = this.response.gsm;
-      		}
-    	},
+			console.log(this.response);
+			if(this.response.userstatus=="E"){
+				console.log('User not logged in');
+				this.user = false;
+			} else {
+				console.log('got user', this.response);
+				this.gsm = this.response.gsm;
+				this.nick = this.response.nick;
+				this.firstname = this.response.firstname;
+				this.lastname = this.response.lastname;
+				this.user = true;
+			}
+		},
 
-    	demo: function(e){
-    		
-    		e.target.parentNode.removeChild(e.target);
+		goProfile: function(){
+			this.fire("router-go", {naarwaar: "/profiel"});
+		},
+
+		userChanged: function(){
+			console.log('User is '+this.user);
+		},
+
+		demo: function(e){
+
+			e.target.parentNode.removeChild(e.target);
     		// set card to read
     		var gsm = this.gsm;
     		var cardid = e.target.getAttribute('cardid');
@@ -126,30 +103,42 @@
     		var gsm = this.gsm;
     		var genCards = new Firebase("https://blazing-fire-6426.firebaseio.com/cards/"+gsm+"/");
     		genCards.push({"title":"Groene gevel premie", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
-    		genCards.push({"title":"Kabouterbos niet bereikbaar", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
-    		genCards.push({"title":"Maak van jouw straat een speelstraat", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
+    		genCards.push({"title":"Kabouterbos niet bereikbaar", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false, "image": "http://www.online-image-editor.com//styles/2014/images/example_image.png"});
+    		genCards.push({"title":"Maak van jouw straat een speelstraat", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false, "image":"http://www.duurzamegemeente.nl/wp-content/uploads/images/stories/duurzaam_bouwen/stadskantoor_gemeente_venlo_cradle_groene_gevel-550x264.jpg"});
     	},
 
     	getCards: function(){
-    		console.log('card reshuffle');
+    		//console.log('card reshuffle');
     		var data = this.data;
     		var keys = this.keys;
     		var cards = [];
     		for (var i = keys.length - 1; i >= 0; i--) {
-    			console.log(this.data[keys[i]]);
+    			//console.log(this.data[keys[i]]);
     			if(!this.data[keys[i]].read){
-    			cards.push({"title": this.data[keys[i]].title, 
-    						"body": this.data[keys[i]].body,
-    						"url": this.data[keys[i]].url,
-    						"type": this.data[keys[i]].type,
-    						"key": keys[i],
-    						"read": this.data[keys[i]].read})
+    				cards.push({"title": this.data[keys[i]].title, 
+    					"body": this.data[keys[i]].body,
+    					"url": this.data[keys[i]].url,
+    					"type": this.data[keys[i]].type,
+    					"key": keys[i],
+    					"read": this.data[keys[i]].read,
+    					"image": this.data[keys[i]].image
+    				})
     			};
     		};
-    		console.log("cards: ", cards);
+    		//console.log("cards: ", cards);
     		this.cards = cards;
+    	},
+
+    	save: function(){
+    		var gsm = this.gsm;
+    		var firstname = this.firstname;
+    		var lastname = this.lastname;
+    		var nick = this.nick;
+    		console.log('about to save: ', firstname, lastname, nick);
+    		var saveFb = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
+    		saveFb.set({"firstname": firstname, "lastname": lastname, "nick": nick})
     	}
 
-	});
+    });
 </script>
 </polymer-element>

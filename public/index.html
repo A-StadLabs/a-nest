@@ -23,10 +23,14 @@
 
 <body unresolved fullbleed>
 
+<app-router id="router">
+  <app-route path="/" import="/apps/aos-smslogin/aos-smslogin.html"></app-route>
+  <app-route path="/home" import="/elements/a-nest/a-nest.html"></app-route>
+  <app-route path="/profiel" import="/elements/a-profiel/a-profiel.html"></app-route>
+</app-router>
 
-<!-- dit moet em laten zien als ge zijn ingelogd -->
-<a-nest></a-nest>
-
+<!-- <a-nest></a-nest>
+ -->
 <paper-toast id="toast" text="{{toastText}}" duration="5000"></paper-toast>
 
 <!-- build:js scripts/app.js -->

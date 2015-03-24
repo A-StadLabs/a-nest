@@ -2,7 +2,6 @@
 (function(document) {
   //'use strict';
 
-
   var that = this;
 
   document.addEventListener('polymer-ready', function() {

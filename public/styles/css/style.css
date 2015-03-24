@@ -29,5 +29,5 @@ h1 {
 
 .kaartje {
   margin: 20px;
-  padding: 20px;
+  max-width: 400px;
   background-color: white; }
