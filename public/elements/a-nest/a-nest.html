@@ -20,20 +20,20 @@
 	handleAs="json"
 	response="{{response}}"
 	on-core-response="{{handleResponse}}">
-</core-ajax>
+	</core-ajax>
 
 <core-scroll-header-panel>
 <core-toolbar>
 <span flex></span>
-<core-icon-button icon="exit-to-app" core-drawer-toggle></core-icon-button>
+<core-icon-button icon="exit-to-app"></core-icon-button>
 </core-toolbar>
 
 <div>
-	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/"  on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
+	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/" on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
 	<div vertical layout center on-tap="{{goProfile}}" hero-id="hero" hero>
 		<img src="../../../../images/avatar.png" class="avatar">
 		<h3>King Flurkel</h3>
-		<core-icon-button icon="lock-open" core-drawer-toggle></core-icon-button>
+		<core-icon-button icon="lock-open"></core-icon-button>
 	</div>
 	<!-- een voorbeeld van een notificatie -->
 	<div vertical layout center id="cards">
@@ -42,9 +42,8 @@
 			<div content>{{i.body}}</div>
 			<div actions>
 				<paper-button dismissive>Some action</paper-button>
-			</div actions>
+			</div>
 		</paper-card>
-
 	</template>
 </div>
 <div vertical layout center>

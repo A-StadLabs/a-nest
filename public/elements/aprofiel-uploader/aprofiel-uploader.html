@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/image-upload/image-upload.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-element.html">
+<link rel="import" href="../../bower_components/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<polymer-element name="aprofiel-uploader" attributes="">
+  <template>
+    <link rel="stylesheet" href="aprofiel-uploader.css">
+    <div class="container" vertical layout>
+      <h3>Upload een nieuw segmentje</h3>
+      <div><image-upload dataurl="{{dataurl}}"></image-upload></div>
+      <div>
+        <paper-dropdown-menu label="Item" on-core-select="{{keuze}}">
+          <paper-dropdown class="dropdown">
+            <core-menu class="menu">
+              <paper-item selected value="gezicht">Gezicht</paper-item>
+              <paper-item value="snit">Snit</paper-item>
+              <paper-item value="oogacc">Oog accessoire</paper-item>
+              <paper-item value="baard">Baard</paper-item>
+              <paper-item value="snor">Snor</paper-item>
+            </core-menu>
+          </paper-dropdown>
+        </paper-dropdown-menu>
+      </div>
+      <div><paper-button on-tap="{{save}}">Save</paper-button></div>
+      <div><img src="{{dataurl}}"></div>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        // define element prototype here
+        save: function(){
+          var that = this;
+          var item = this.keuze;
+          var img = this.dataurl;
+          var savefb = new Firebase("https://blazing-fire-6426.firebaseio.com/profielimgs/");
+          savefb.push({"item": item, "url": img}, function(err){
+            console.log(err);
+            that.fire("show-toast", { bericht: "Saved!" });
+          });
+        },
+
+        keuze: function(e){  
+          console.log(e.detail.item.getAttribute('value'));
+          this.keuze = e.detail.item.getAttribute('value');
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>
