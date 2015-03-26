@@ -26,6 +26,18 @@
           </paper-dropdown>
         </paper-dropdown-menu>
       </div>
+      <div>
+        <paper-dropdown-menu label="Sex">
+          <paper-dropdown class="dropdown">
+            <core-menu class="menu" valueattr="value" on-core-select="{{selectsexAction}}">
+              <paper-item selected value="man">Man</paper-item>
+              <paper-item value="vrouw">Vrouw</paper-item>
+              <paper-item value="unisex">Unisex</paper-item>
+              <paper-item value="kind">Kind</paper-item>
+            </core-menu>
+          </paper-dropdown>
+        </paper-dropdown-menu>
+      </div>
       <div><paper-button on-tap="{{save}}">Save</paper-button></div>
       <div><img src="{{dataurl}}"></div>
     </div>
@@ -39,9 +51,10 @@
         save: function(){
           var that = this;
           var item = this.keuze;
+          var sex = this.sex;
           var img = this.dataurl;
           var savefb = new Firebase("https://blazing-fire-6426.firebaseio.com/profielimgs/");
-          savefb.push({"item": item, "url": img}, function(err){
+          savefb.push({"item": item, "url": img, "sex": sex}, function(err){
             console.log(err);
             that.fire("show-toast", { bericht: "Saved " + item });
           });
@@ -51,6 +64,13 @@
   if (detail.isSelected) {
     this.keuze = detail.item.getAttribute("value");
     console.log(this.keuze);
+  }
+},
+
+selectsexAction: function(e, detail) {
+  if (detail.isSelected) {
+    this.sex = detail.item.getAttribute("value");
+    console.log(this.sex);
   }
 },
 

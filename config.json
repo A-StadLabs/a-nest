@@ -5,6 +5,6 @@
 		"simulationmode": false
 	},
 	"firebase":{
-		"baseurl" : ""
+		"baseurl" : "https://blazing-fire-6426.firebaseio.com"
 	}
 }
