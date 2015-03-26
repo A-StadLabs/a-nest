@@ -7,7 +7,7 @@
 		<core-icon-button icon="arrow-back" on-tap="{{goHome}}"></core-icon-button>
 		<span flex></span>
 	</core-toolbar>
-	<div vertical layout>
+	<div vertical layout center>
 	<div class="gezicht">
 		<div id="basisgezicht" class="fixit">
 			<img src="{{gezicht}}">
@@ -19,10 +19,10 @@
 			<img src="{{oogacc}}">
 		</div>
 		<div id="snor" class="fixit">
-			
+			<img src="{{snor}}">
 		</div>
 		<div id="baard" class="fixit">
-			
+			<img src="{{baard}}">
 		</div>
 	</div>
 	
@@ -30,15 +30,34 @@
 	
 	<div>
 		<template repeat="{{i in snitten}}">
-			<img src="{{i.src}}" on-tap="{{selectSnit}}" key="{{i.id}}" width="80" height="80">
+			<img src="{{i.src}}" on-tap="{{selectSnit}}" width="80" height="105">
 		</template>
 	</div>
 	
 	<div>
-	<template repeat="{{i in gezichten}}">
-		<img src="{{i.src}}" key="{{i.id}}" width="80" height="80">
-	</template>
+		<template repeat="{{i in gezichten}}">
+			<img src="{{i.src}}" on-tap="{{selectGezicht}}" width="80" height="105">
+		</template>
 	</div>
+
+	<div>
+		<template repeat="{{i in oogaccs}}">
+			<img src="{{i.src}}" on-tap="{{selectOogacc}}" width="80" height="105">
+		</template>
+	</div>
+
+	<div>
+		<template repeat="{{i in baarden}}">
+			<img src="{{i.src}}" on-tap="{{selectBaard}}" width="80" height="105">
+		</template>
+	</div>
+
+	<div>
+		<template repeat="{{i in snorren}}">
+			<img src="{{i.src}}" on-tap="{{selectSnor}}" width="80" height="105">
+		</template>
+	</div>
+
 </template>
 <script>
     Polymer({
@@ -53,15 +72,66 @@
     		this.snor = "";
     		this.baard = "";
 
-    		this.gezichten = [{"id": 1, "src": "../../../../images/nestheads-DEFAULT-01.svg"},{"id": 2, "src": "../../../../images/nestheads-DEFAULT-01.svg"},{"id": 3, "src": "../../../../images/nestheads-DEFAULT-01.svg"}];
-    		this.snitten = [{"id": 1, "src": "../../../../images/nestheads-SNIT1.svg"},{"id": 1, "src": "../../../../images/nestheads-SNIT2.svg"},{"id": 1, "src": "../../../../images/nestheads-SNIT3.svg"}];
+    		var gezichten = [];
+    		var snitten = [];
+    		var snorren = [];
+    		var baarden = [];
+    		var oogaccs = [];
+
+    		var that = this;
+
+    		var getBodyft = new Firebase("https://blazing-fire-6426.firebaseio.com/profielimgs/");
+    		getBodyft.on("child_added", function(snapshot){
+    			//console.log(snapshot.val());
+    			switch (snapshot.val().item){
+    				case "gezicht":
+    					gezichten.push({"item": snapshot.val().item, "src": snapshot.val().url});
+    					break;
+    				case "snit":
+    					snitten.push({"item": snapshot.val().item, "src": snapshot.val().url});
+    					break;
+    				case "baard":
+    					baarden.push({"item": snapshot.val().item, "src": snapshot.val().url});
+    					break;
+    				case "snor":
+    					snorren.push({"item": snapshot.val().item, "src": snapshot.val().url});
+    					break;
+    				case "oogacc":
+    					oogaccs.push({"item": snapshot.val().item, "src": snapshot.val().url});
+    					break;
+    			};
+
+    			that.gezichten = gezichten;
+    			that.snorren = snorren;
+    			that.baarden = baarden;
+    			that.oogaccs = oogaccs;
+    			that.snitten = snitten;
+    		});
+
     	},
 
     	selectSnit: function(e){
-    		var key = e.target.getAttribute('src');
-    		console.log(key);
-    		this.snit = key;
+    		this.snit = e.target.getAttribute('src');
+    	},
+
+    	selectGezicht: function(e){
+    		this.gezicht = e.target.getAttribute('src');
+    	},
+
+    	selectOogacc: function(e){
+    		this.oogacc = e.target.getAttribute('src');
+    	},
+
+    	selectBaard: function(e){
+    		this.baard = e.target.getAttribute('src');
+    	},
+
+    	selectSnor: function(e){
+    		this.snor = e.target.getAttribute('src');
     	}
+
+    	
+
     });
 
 </script>

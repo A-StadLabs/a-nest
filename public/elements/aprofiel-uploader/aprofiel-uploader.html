@@ -14,9 +14,9 @@
       <h3>Upload een nieuw segmentje</h3>
       <div><image-upload dataurl="{{dataurl}}"></image-upload></div>
       <div>
-        <paper-dropdown-menu label="Item" on-core-select="{{keuze}}">
+        <paper-dropdown-menu label="Item">
           <paper-dropdown class="dropdown">
-            <core-menu class="menu">
+            <core-menu class="menu" valueattr="value" on-core-select="{{selectAction}}">
               <paper-item selected value="gezicht">Gezicht</paper-item>
               <paper-item value="snit">Snit</paper-item>
               <paper-item value="oogacc">Oog accessoire</paper-item>
@@ -43,14 +43,18 @@
           var savefb = new Firebase("https://blazing-fire-6426.firebaseio.com/profielimgs/");
           savefb.push({"item": item, "url": img}, function(err){
             console.log(err);
-            that.fire("show-toast", { bericht: "Saved!" });
+            that.fire("show-toast", { bericht: "Saved " + item });
           });
         },
 
-        keuze: function(e){  
-          console.log(e.detail.item.getAttribute('value'));
-          this.keuze = e.detail.item.getAttribute('value');
-        }
+        selectAction: function(e, detail) {
+  if (detail.isSelected) {
+    this.keuze = detail.item.getAttribute("value");
+    console.log(this.keuze);
+  }
+},
+
+        
       });
 
     })();
