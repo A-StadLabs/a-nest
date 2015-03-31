@@ -64,17 +64,17 @@
 		ready: function() {
 
             console.log('Glbals: ',this.globals);
-this.$.checkStatus.go();
+            this.$.checkStatus.go();
 		},
 
         checkstatusresponseChanged: function(){
       if(this.checkstatusresponse.userstatus=='E'){
         console.log('user is niet aangemeld.');
-        this.fire("router-go", {naarwaar: "/"});
+        //this.fire("router-go", {naarwaar: "/"});
       } else {
         console.log('user is WEL aangemeld.');
         this.globals.user = this.checkstatusresponse;
-        this.fire("router-go", {naarwaar: "/home"});
+        //this.fire("router-go", {naarwaar: "/home"});
       };
     },
 
