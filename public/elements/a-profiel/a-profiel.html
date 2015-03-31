@@ -1,31 +1,20 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
+<link rel="import" href="../../../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
 
 <polymer-element name="a-profiel" attributes="">
   <template>
     <link rel="stylesheet" href="a-profiel.css" />
+	
+	<aos-globals values="{{globals}}"></aos-globals>
+
     <core-toolbar>
 		<core-icon-button icon="arrow-back" on-tap="{{goHome}}"></core-icon-button>
 		<span flex></span>
 	</core-toolbar>
 	<div vertical layout center>
-	<div class="gezicht">
-		<div id="basisgezicht" class="fixit">
-			<img src="{{gezicht}}">
-		</div>
-		<div id="snit" class="fixit">
-			<img src="{{snit}}">
-		</div>
-		<div id="oogaccessoire" class="fixit">
-			<img src="{{oogacc}}">
-		</div>
-		<div id="snor" class="fixit">
-			<img src="{{snor}}">
-		</div>
-		<div id="baard" class="fixit">
-			<img src="{{baard}}">
-		</div>
-	</div>
-	
+		<a-avatar user="{{gsm}}" avatar="{{avatar}}"></a-avatar>
 	</div>
 	
 	<div>
@@ -65,12 +54,20 @@
     		this.fire("router-go", { naarwaar: "/home" });
     	},
 
+    	handleResponseCheck: function(){
+        console.log(this.responseCheck);
+        if(this.responseCheck.userstatus!='E'){
+          this.user = true;
+          this.gsm = this.responseCheck.gsm;
+          this.fire("show-toast", { bericht: "Aangemeld" });
+      	} else {
+      	  this.fire("show-toast", { bericht: "Niet aangemeld" });
+      	  this.fire("router-go", {naarwaar: "/"});
+      	}
+      console.log(this.user, this.gsm);
+    },
+
     	ready: function(){
-    		this.gezicht = "../../../../images/nestheads-DEFAULT-01.svg";
-    		this.snit = "../../../../images/nestheads-SNIT2.svg";
-    		this.oogacc = "../../../../images/nestheads-GLASSES.svg";
-    		this.snor = "";
-    		this.baard = "";
 
     		var gezichten = [];
     		var snitten = [];
@@ -111,23 +108,23 @@
     	},
 
     	selectSnit: function(e){
-    		this.snit = e.target.getAttribute('src');
+    		this.avatar.snit = e.target.getAttribute('src');
     	},
 
     	selectGezicht: function(e){
-    		this.gezicht = e.target.getAttribute('src');
+    		this.avatar.gezicht = e.target.getAttribute('src');
     	},
 
     	selectOogacc: function(e){
-    		this.oogacc = e.target.getAttribute('src');
+    		this.avatar.oogacc = e.target.getAttribute('src');
     	},
 
     	selectBaard: function(e){
-    		this.baard = e.target.getAttribute('src');
+    		this.avatar.baard = e.target.getAttribute('src');
     	},
 
     	selectSnor: function(e){
-    		this.snor = e.target.getAttribute('src');
+    		this.avatar.snor = e.target.getAttribute('src');
     	}
 
     	

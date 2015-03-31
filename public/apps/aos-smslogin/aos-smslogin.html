@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../elements/aos-globals/aos-globals.html">
 <link rel="import" href="../../bower_components/core-input/core-input.html">
 <link rel="import" href="../../bower_components/core-input/core-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
@@ -11,51 +10,54 @@
 <link rel="import" href="../../bower_components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="../../bower_components/core-animated-pages/transitions/slide-from-right.html">
 
-
 <polymer-element name="aos-smslogin" attributes="">
 
 <template>
 
-  <link rel="stylesheet" href="aos-smslogin.css" />
+  <aos-globals values="{{globals}}" id="globals"></aos-globals>
 
-  <core-ajax method="GET" id="checkUser" handleAs="json" url="/user" response="{{responseCheck}}" on-core-response="{{handleResponseCheck}}" auto></core-ajax>
+  <link rel="stylesheet" href="../../styles/css/style.css" />
 
-  <core-ajax method="GET" id="userCheck" handleAs="json" url="/usercheck" response="{{responseUser}}" on-core-response="{{handleResponseUserCheck}}"></core-ajax>
+  <!-- Check of er een user is aangemeld -->
+  <core-ajax method="GET" id="checkStatus" handleAs="json" url="/user" response="{{checkstatusresponse}}" on-core-response="{{checkstatus}}" auto></core-ajax>
 
-  <core-ajax method="GET" id="codeCheck" handleAs="json" url="/codecheck" response="{{responseCode}}" on-core-response="{{handleResponseCodeCheck}}"></core-ajax>
+  <!-- Vind een user op basis van het ingevoerd gsm nummer -->
+  <core-ajax method="GET" id="findUser" handleAs="json" url="/usercheck" response="{{finduserresponse}}" on-core-response="{{findUser}}"></core-ajax>
 
+  <!-- Check of de code overeenkomt voor de gebruiker en zoja, log de gebruiker in --> 
+  <core-ajax method="GET" id="codeCheck" handleAs="json" url="/codecheck" response="{{findcoderesponse}}" on-core-response="{{findCode}}"></core-ajax>
+
+  <!-- Logout call -->
   <core-ajax method="GET" id="logout" handleAs="json" url="/logout" response="{{logoutresponse}}" on-core-response="{{handleLogout}}"></core-ajax>
 
+  <core-animated-pages fit selected="{{section}}" class="anim" id="animPages" transitions="slide-from-right">
 
-    <core-animated-pages selected="{{section}}" transitions="" id="animPages" transitions="slide-from-right">
     <section>
       <core-localstorage name="AnestNummer" value="{{inputvalue}}"></core-localstorage>
-      <div class="container" vertical layout center>
-        <img src="/images/key.svg" class="avatar">
-
+      <div class="container" vertical layout center center-justified>
+        <h1>GSM-nummer?</h1>
         <div>
-          <input type="text" is="core-input" label="GSM" id="input2" is="core-input" value="{{inputvalue}}" class="input" autofocus>
+          <input type="tel" label="GSM" id="input2" value="{{inputvalue}}" class="input">
         </div>
-        
-        <paper-button raised on-tap="{{validate}}">
-        <core-icon icon="arrow-forward"></core-icon>
-      </paper-button>
-    </div>
-  </section>
-  <section>
-    <div class="container">
-      <h2>Verifieer code</h2>
-      <div>
-        <paper-input autofocus label="Code" id="code" is="core-input" value="{{codevalue}}"></paper-input>
+        <div>
+          <button id="button1" on-tap="{{finduser}}">OK</button>
+        </div>
       </div>
-      <div>
-        <paper-button raised on-tap="{{checkcode}}">
-        <core-icon icon="arrow-forward"></core-icon>
-      </paper-button>
-    </div>
-  </div>
-</section>
-</core-animated-pages>
+    </section>
+
+    <section>
+      <div class="container" vertical layout center center-justified>
+        <h1>Verifieer code</h1>
+        <div>
+          <input type="tel" label="Code" id="code" value="{{codevalue}}" class="input">
+        </div>
+        <div>
+          <button id="button2" on-tap="{{findcode}}">OK</button>
+        </div>
+      </div>
+    </section>
+
+  </core-animated-pages>
 
 </template>
 
@@ -64,48 +66,81 @@
   Polymer({
 
     ready: function() {
-      console.log('SMS Login app loaded.'); 
-      //this.user = false;
+      console.log('sms login element loaded.'); 
       this.section = 0;
-      this.user = false;
+      // Eerst even checken of de gebruiker al is aangemeld of niet
+      console.log('ik ga nu checken of de user is aangemeld');
+      this.$.checkStatus.go();
     },
 
-    validate: function() {
+    checkstatusresponseChanged: function(){
+      if(this.checkstatusresponse.status=='E'){
+        console.log('user is niet aangemeld.');
+      } else {
+        console.log('user is WEL aangemeld.');
+        this.globals.user = this.checkstatusresponse;
+        this.fire("router-go", {naarwaar: "/home"});
+      };
+    },
+
+    finduser: function() {
       console.log(this.inputvalue);
       var gsmnummer = this.inputvalue;
-      this.$.userCheck.params = { "gsm": gsmnummer };
-        //this.$.loginAjax.params = { "username": "kingflurkel", "password": "mike48" };
-        this.$.userCheck.go();
+      this.$.findUser.params = { "gsm": gsmnummer };
+      this.$.findUser.go();
+      this.$.button1.disabled = true;
+    },
+
+    finduserresponseChanged: function(){
+      console.log(this.finduserresponse);
+      if(this.finduserresponse.message == 1){
+        console.log('code werd verzonden');
         this.section = 1;
-      },
+      } else {
+        console.log('er ging iets fout');
+      }
+    },
 
-      handleResponseUserCheck: function(){
-        console.log(this.responseUser.code);
-        this.kode = this.responseUser.code;
-      },
+    findcode: function(){
+      var code = this.codevalue;
+      var gsm = this.inputvalue;
+      this.$.button2.disabled = true;
+      this.$.codeCheck.params = { "kode": code, "gsm": gsm };
+      console.log('Ik ga checken of die code klopt.');
+      this.$.codeCheck.go();
+      //this.gsm = gsm;
+    },
 
-      handleResponseCheck: function(){
+    findcoderesponseChanged: function(){
+      console.log('Ik heb iets teruggekregen: ', this.findcoderesponse);
+      this.globals.user = this.findcoderesponse;
+      this.fire("router-go", {naarwaar: "/home"});
+    },
+
+    handleResponseUserCheck: function(){
+      console.log(this.responseUser);
+      this.kode = this.responseUser.code;
+    },
+
+    // Hier checken we gewoon of de user al bestaat of niet.
+
+    handleResponseCheck: function(){
         console.log(this.responseCheck);
         if(this.responseCheck.userstatus!='E'){
-          this.user = true;
-          this.fire("router-go", { naarwaar: '/home' });
-          this.gsm = this.responseCheck.gsm;
+          //this.fire("router-go", {naarwaar: "/home"});
         //this.section = 2;
-      };
+        } else {
+          //this.fire("router-go",{ naarwaar: "/"});
+        };
       console.log(this.user);
     },
 
-    checkcode: function(){
-      var code = this.codevalue;
-      var gsm = this.inputvalue;
-      this.$.codeCheck.params = { "kode": code, "gsm": gsm };
-      this.$.codeCheck.go();
-      this.gsm = gsm;
-    },
 
     handleResponseCodeCheck: function(){
       console.log(this.responseCode);
+      this.$.globals.user = this.responseCode;
       this.user = true;
+      this.fire("router-go", { naarwaar: '/home' });
     },
 
     logout: function(){

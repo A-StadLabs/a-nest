@@ -9,6 +9,8 @@ var config = require('./lib/config');
 var twilio = require('./lib/services/twilio');
 var gsmcode = require('./lib/services/gsmcode');
 
+var d = new Date();
+
 app.use(cookieParser())
 app.use(cookieSession({
   keys: ['secret1', 'secret2']
@@ -18,6 +20,23 @@ app.use(express.static(__dirname + '/public'));
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
+});
+
+// check userstatus
+app.get('/user', function(req, res) {
+  //if (req.session.userobject) {
+    res.send({"status": "OK", "user": req.session.userobject });
+    //console.log(req.session.userobject);
+ // } else {
+   // console.log(req.session.userobject);
+   // res.send({
+   //   'status': 'E',
+   //   'msg': 'User not logged in.'
+   // });
+    //req.session.destroy(function(err) {
+    // cannot access session here
+    //});
+  //}
 });
 
 // Check of de user al bestaat, indien niet gaan we een user aanmaken.
@@ -33,7 +52,7 @@ app.get('/usercheck', function(req, res) {
       }
     });
     res.send({
-      message: 'code sent to user'
+      message: 1
     });
   });
 });
@@ -44,12 +63,13 @@ app.get('/codecheck', function(req, res) {
   gsmcode.getUser(req.query.gsm, req.query.kode, function(err, user) {
     if (user) {
       console.log('user gevonden...');
-      console.log(user);
+      //console.log(user);
       req.session.userobject = user;
-      res.json(user);
+      console.log('sessie object: ',req.session.userobject);
+      res.json({"status": "OK", "user": user});
     } else {
       console.log('geen user gevonden...');
-      res.json({});
+      res.json({"status": "E"});
     }
   });
 });
@@ -60,53 +80,10 @@ app.get('/incoming', function(req, res) {
   console.log(res);
 });
 
-// Login voor profiel
-app.get('/login', function(req, res) {
-  var user = req.query.username;
-  var pass = req.query.password;
-  //console.log(val);
-  request.post({
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: 'post',
-    jar: true,
-    url: 'https://www.antwerpen.be/srv/user/d/auth',
-    json: {
-      "username": user,
-      "password": pass
-    }
-  }, function(error, response, body) {
-    //req.session.userobject = body;
-    console.log(body.success);
-    if (body.success === true) {
-      req.session.userobject = body;
-    }
-    res.send(body);
-  });
-});
-
 //logout
 app.get('/logout', function(req, res) {
   req.session = null;
   res.send("logged out");
-});
-
-// check user
-app.get('/user', function(req, res) {
-  if (req.session && req.session.userobject) {
-    res.send(req.session.userobject);
-    console.log(req.session.userobject);
-  } else {
-    //console.log(req.session.userobject);
-    res.send({
-      'userstatus': 'E',
-      'msg': 'User not logged in.'
-    });
-    //req.session.destroy(function(err) {
-    // cannot access session here
-    //});
-  }
 });
 
 // // CRS persoon 

@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-element.html">
+<link rel="import" href="../../elements/aos-globals/aos-globals.html">
+
+
+<polymer-element name="a-avatar" attributes="avatar">
+  <template>
+    <link rel="stylesheet" href="a-avatar.css">
+
+    <firebase-element location="https://blazing-fire-6426.firebaseio.com/user/{{globals.user.gsm}}/avatar/" on-data-change="{{getAvatar}}" data="{{avatar}}" id="fbavatar"></firebase-element>
+
+    <aos-globals values="{{globals}}"></aos-globals>
+
+    <div class="gezicht">
+    <div id="basisgezicht" class="fixit">
+      <img src="{{avatar.gezicht}}">
+    </div>
+    <div id="snit" class="fixit">
+      <img src="{{avatar.snit}}">
+    </div>
+    <div id="oogaccessoire" class="fixit">
+      <img src="{{avatar.oogacc}}">
+    </div>
+    <div id="snor" class="fixit">
+      <img src="{{avatar.snor}}">
+    </div>
+    <div id="baard" class="fixit">
+      <img src="{{avatar.baard}}">
+    </div>
+  </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+
+       
+      });
+    })();
+  </script>
+</polymer-element>

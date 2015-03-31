@@ -5,8 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>aOS</title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+
   <link rel="apple-touch-icon" href="images/astadlabs.png">
     <!-- 3. responsive-sh*t. -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,12 +17,13 @@
   <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
   <!-- endbuild-->
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-
   <link rel="import" href="elements/elements.html">
   <!-- endbuild-->
 </head>
 
 <body unresolved fullbleed>
+
+<aos-globals values="{{globals}}" id="globals"></aos-globals>
 
 <app-router id="router">
   <app-route path="/" import="/apps/aos-smslogin/aos-smslogin.html"></app-route>
@@ -30,8 +32,6 @@
   <app-route path="/upload" import="/elements/aprofiel-uploader/aprofiel-uploader.html"></app-route>
 </app-router>
 
-<!-- <a-nest></a-nest>
- -->
 <paper-toast id="toast" text="{{toastText}}" duration="5000"></paper-toast>
 
 <!-- build:js scripts/app.js -->

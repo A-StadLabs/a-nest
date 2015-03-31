@@ -9,30 +9,37 @@
 <link href="../../../../bower_components/app-router/app-router.html" rel="import">
 
 <link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
+<link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
+<link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
 
 <polymer-element name="a-nest" attributes="">
 <template>
 	<link rel="stylesheet" href="../../styles/css/style.css" />
 
+	<aos-globals values="{{globals}}"></aos-globals>
+
+    <!-- Check of er een user is aangemeld -->
+    <core-ajax method="GET" id="checkStatus" handleAs="json" url="/user" response="{{checkstatusresponse}}" on-core-response="{{checkstatus}}" auto></core-ajax>
+
 	<core-ajax
-	auto
-	url="/user"
+	id="logout" 
+	url="/logout"
 	handleAs="json"
-	response="{{response}}"
-	on-core-response="{{handleResponse}}">
+	response="{{logoutresp}}"
+	on-core-response="{{logoutresponse}}">
 	</core-ajax>
 
 <core-scroll-header-panel>
 <core-toolbar>
 <span flex></span>
-<core-icon-button icon="exit-to-app"></core-icon-button>
+<core-icon-button icon="exit-to-app" on-tap="{{logout}}"></core-icon-button>
 </core-toolbar>
 
 <div>
 	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/" on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
 	<div vertical layout center on-tap="{{goProfile}}" hero-id="hero" hero>
-		<img src="../../../../images/avatar.png" class="avatar">
-		<h3>King Flurkel</h3>
+		<a-avatar user="{{gsm}}" class="avatar"></a-avatar>
+		<h3>{{globals.user.nick}}</h3>
 		<core-icon-button icon="lock-open"></core-icon-button>
 	</div>
 	<!-- een voorbeeld van een notificatie -->
@@ -55,32 +62,28 @@
 <script>
 	Polymer({
 		ready: function() {
-			//this.selected = "/home";
-			this.user = false;
-			this.firstuse = true;
+
+            console.log('Glbals: ',this.globals);
+this.$.checkStatus.go();
 		},
+
+        checkstatusresponseChanged: function(){
+      if(this.checkstatusresponse.userstatus=='E'){
+        console.log('user is niet aangemeld.');
+        this.fire("router-go", {naarwaar: "/"});
+      } else {
+        console.log('user is WEL aangemeld.');
+        this.globals.user = this.checkstatusresponse;
+        this.fire("router-go", {naarwaar: "/home"});
+      };
+    },
 
 		routeSelectedChanged: function(){
-			console.log(this.routeSelected);
-		},
-
-		handleResponse: function(){
-			console.log(this.response);
-			if(this.response.userstatus=="E"){
-				console.log('User not logged in');
-				this.user = false;
-			} else {
-				console.log('got user', this.response);
-				this.gsm = this.response.gsm;
-				this.nick = this.response.nick;
-				this.firstname = this.response.firstname;
-				this.lastname = this.response.lastname;
-				this.user = true;
-			}
+		  console.log(this.routeSelected);
 		},
 
 		goProfile: function(){
-			this.fire("router-go", {naarwaar: "/profiel"});
+		  this.fire("router-go", {naarwaar: "/profiel"});
 		},
 
 		userChanged: function(){
@@ -88,7 +91,6 @@
 		},
 
 		demo: function(e){
-
 			e.target.parentNode.removeChild(e.target);
     		// set card to read
     		var gsm = this.gsm;
@@ -136,6 +138,10 @@
     		console.log('about to save: ', firstname, lastname, nick);
     		var saveFb = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
     		saveFb.set({"firstname": firstname, "lastname": lastname, "nick": nick})
+    	},
+
+    	logout: function(){
+    		this.$.logout.go();
     	}
 
     });

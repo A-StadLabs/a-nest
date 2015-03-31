@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  background-color: white !important;
+  height: 200px;
+}
+
+.fixit {
+	position: absolute;
+}
+
+.gezicht {
+	height: 300px;
+}
