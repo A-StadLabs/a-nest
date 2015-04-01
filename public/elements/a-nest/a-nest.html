@@ -68,12 +68,12 @@
 		},
 
         checkstatusresponseChanged: function(){
-      if(this.checkstatusresponse.userstatus=='E'){
-        console.log('user is niet aangemeld.');
+      if(this.checkstatusresponse.status=='E'){
+        console.log('user is niet aangemeld.', this.checkstatusresponse.user);
         //this.fire("router-go", {naarwaar: "/"});
       } else {
-        console.log('user is WEL aangemeld.');
-        this.globals.user = this.checkstatusresponse;
+        console.log('user is WEL aangemeld.', this.checkstatusresponse.user);
+        this.globals.user = this.checkstatusresponse.status;
         //this.fire("router-go", {naarwaar: "/home"});
       };
     },

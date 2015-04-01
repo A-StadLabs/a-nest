@@ -24,19 +24,19 @@ app.listen(app.get('port'), function() {
 
 // check userstatus
 app.get('/user', function(req, res) {
-  //if (req.session.userobject) {
+  if (req.session.userobject) {
     res.send({"status": "OK", "user": req.session.userobject });
-    //console.log(req.session.userobject);
- // } else {
+    console.log(req.session.userobject);
+  } else {
    // console.log(req.session.userobject);
-   // res.send({
-   //   'status': 'E',
-   //   'msg': 'User not logged in.'
-   // });
+    res.send({
+      'status': 'E',
+      'user': 'User not logged in.'
+    });
     //req.session.destroy(function(err) {
     // cannot access session here
     //});
-  //}
+  }
 });
 
 // Check of de user al bestaat, indien niet gaan we een user aanmaken.
