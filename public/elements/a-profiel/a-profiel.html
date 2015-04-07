@@ -69,6 +69,8 @@
 
     	ready: function(){
 
+            //console.log(JSON.stringify(this.globals));
+
     		var gezichten = [];
     		var snitten = [];
     		var snorren = [];
@@ -112,6 +114,7 @@
     	},
 
     	selectGezicht: function(e){
+            console.log('set gezicht');
     		this.avatar.gezicht = e.target.getAttribute('src');
     	},
 

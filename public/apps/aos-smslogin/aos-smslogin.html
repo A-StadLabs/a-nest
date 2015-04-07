@@ -79,7 +79,12 @@
       } else {
         console.log('user is WEL aangemeld.');
         this.globals.user = this.checkstatusresponse;
-        this.fire("router-go", {naarwaar: "/home"});
+        console.log(this.checkstatusresponse);
+        if(this.globals.user.firstuse){
+          this.fire("router-go", {naarwaar: "/first"});
+        } else {
+          this.fire("router-go", {naarwaar: "/home"});
+        }
       };
     },
 

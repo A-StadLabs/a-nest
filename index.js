@@ -3,39 +3,40 @@ var express = require('express');
 var app = express();
 var request = require('request');
 var cookieParser = require('cookie-parser');
-var cookieSession = require('cookie-session');
+var session = require('cookie-session');
 var config = require('./lib/config');
+
 // load services from seperate files
 var twilio = require('./lib/services/twilio');
 var gsmcode = require('./lib/services/gsmcode');
-
-var d = new Date();
+var util = require('util');
 
 app.use(cookieParser())
-app.use(cookieSession({
-  keys: ['secret1', 'secret2']
-}));
+
+app.use(session({
+  keys: ['secret1', 'secret2'],
+  maxAge: 60 * 60 * 24 * 2 * 1000,
+  // seconden * minuten * uren * dagen * milliseconden
+  secure:false,
+  name: 'astadlabs'
+  }));
+
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
-
 app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'));
 });
 
 // check userstatus
 app.get('/user', function(req, res) {
+  //console.log('Sessie? '+ req.session.userobject);
   if (req.session.userobject) {
-    res.send({"status": "OK", "user": req.session.userobject });
+    res.send({ "status": "OK", "user": req.session.userobject });
     console.log(req.session.userobject);
   } else {
-   // console.log(req.session.userobject);
     res.send({
       'status': 'E',
-      'user': 'User not logged in.'
+      'user': 'User not logged in.',
     });
-    //req.session.destroy(function(err) {
-    // cannot access session here
-    //});
   }
 });
 
@@ -50,7 +51,7 @@ app.get('/usercheck', function(req, res) {
       } else {
         console.log(code+ ' sms sent to ' + searchstring);
       }
-    });
+    }); 
     res.send({
       message: 1
     });
@@ -60,11 +61,13 @@ app.get('/usercheck', function(req, res) {
 // Check code en login
 app.get('/codecheck', function(req, res) {
   console.log('codecheck');
+  var mysession = req.session;
   gsmcode.getUser(req.query.gsm, req.query.kode, function(err, user) {
     if (user) {
       console.log('user gevonden...');
-      //console.log(user);
-      req.session.userobject = user;
+      console.log('USER: ',user);
+      mysession.userobject = user; 
+      mysession.gsm = req.query.gsm;
       console.log('sessie object: ',req.session.userobject);
       res.json({"status": "OK", "user": user});
     } else {
@@ -73,7 +76,6 @@ app.get('/codecheck', function(req, res) {
     }
   });
 });
-
 
 // Incoming sms checken
 app.get('/incoming', function(req, res) {
@@ -85,101 +87,3 @@ app.get('/logout', function(req, res) {
   req.session = null;
   res.send("logged out");
 });
-
-// // CRS persoon 
-// app.get('/crs-persoon', function(req, res) {
-//   //console.log(val);
-//   req.session.userobject;
-//   request.get({
-//     url: 'https://www.antwerpen.be/srv/user/d/account/crsklant/crspersoon',
-//     jar: true
-//   }, function(error, response, body) {
-//     res.send(body);
-//   });
-// });
-
-// // CRS medewerker
-// app.get('/crs-medewerker', function(req, res) {
-//   //console.log(val);
-//   req.session.userobject;
-//   request.get({
-//     url: 'https://www.antwerpen.be/srv/user/d/account/crsklant/info',
-//     jar: true
-//   }, function(error, response, body) {
-//     res.send(body);
-//   });
-// });
-
-// // Find address  
-// app.get('/adres', function(req, res) {
-//   var val = req.query.search;
-//   //req.session.userobject;
-//   request.get({
-//     url: 'https://www.antwerpen.be/srv/d/astad/location/search/' + val,
-//     jar: true
-//   }, function(error, response, body) {
-//     res.send(body);
-//   });
-// });
-
-// // Notificaties 
-// app.get('/notifications', function(req, res) {
-//   //console.log(val);
-//   req.session.userobject;
-//   request.get({
-//     url: 'https://www.antwerpen.be/srv/notification/d/unread',
-//     jar: true
-//   }, function(error, response, body) {
-//     res.send(body);
-//   });
-// });
-
-// //Vind een gebruiker
-// app.get('/gebruiker', function(req, res) {
-//   //console.log(val);
-//   var searchstring = req.query.search;
-//   var users = [];
-//   var findUser = new Firebase("https://blazing-fire-6426.firebaseio.com/chat/directory/");
-//   findUser.on("child_added", function(snapshot) {
-//     if (snapshot.val().username.substr(0, searchstring.length) == searchstring) {
-//       users.push({
-//         "username": snapshot.val().username,
-//         "userid": snapshot.val().userid,
-//         "avatar": snapshot.val().avatar,
-//         "firstname": snapshot.val().firstname
-//       });
-//       console.log(users);
-//     }
-//   });
-
-//   res.send(users);
-// });
-
-// // Notificaties
-
-// // Een notificatie versturen
-// app.get('/notificatie', function(req, res) {
-//   //console.log(val);
-//   var user = req.query.user;
-//   var app = req.query.app;
-//   var msg = req.query.msg;
-//   var link = req.query.link;
-
-//   request.post({
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     method: 'post',
-//     url: 'https://www.antwerpen.be/srv/notification/d/add-notification',
-//     jar: true,
-//     json: {
-//       app: app, // welke app verzend het
-//       user: username, // naar wie moet dat
-//       message: msg, // wat is je bericht
-//       link: link
-//     },
-//   }, function(error, response, body) {
-//     res.send(body);
-//     console.log(body);
-//   });
-// });

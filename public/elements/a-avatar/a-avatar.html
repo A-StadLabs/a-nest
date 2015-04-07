@@ -3,14 +3,13 @@
 <link rel="import" href="../../elements/aos-globals/aos-globals.html">
 
 
-<polymer-element name="a-avatar" attributes="avatar">
+<polymer-element name="a-avatar" attributes="avatar user disable">
   <template>
     <link rel="stylesheet" href="a-avatar.css">
 
-    <firebase-element location="https://blazing-fire-6426.firebaseio.com/user/{{globals.user.gsm}}/avatar/" on-data-change="{{getAvatar}}" data="{{avatar}}" id="fbavatar"></firebase-element>
-
     <aos-globals values="{{globals}}"></aos-globals>
 
+    <firebase-element location="https://blazing-fire-6426.firebaseio.com/user/{{gsm}}/avatar/" on-data-change="{{getAvatar}}" data="{{avatar}}" id="fbavatar"></firebase-element>
     <div class="gezicht">
     <div id="basisgezicht" class="fixit">
       <img src="{{avatar.gezicht}}">
@@ -27,6 +26,7 @@
     <div id="baard" class="fixit">
       <img src="{{avatar.baard}}">
     </div>
+    <p>hallo {{user}} {{avatar.gender}}</p>
   </div>
   </template>
   <script>
@@ -34,6 +34,10 @@
       'use strict';
 
       Polymer({
+
+        ready: function(){
+          console.log('user vanuit a-avatar: ', JSON.stringify(this.globals));
+        }
 
        
       });

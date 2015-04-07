@@ -1,0 +1,119 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../../../../bower_components/core-animated-pages/transitions/slide-from-right.html">
+<link rel="import" href="../../../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
+<link rel="import" href="../../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
+<link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../../bower_components/firebase-element/firebase-element.html">
+
+<link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
+<link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
+<link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
+
+<polymer-element name="a-firstuse" attributes="">
+<template>
+<link rel="stylesheet" href="../../styles/css/firstuse.css" />
+<aos-globals values="{{globals}}"></aos-globals>
+
+<!-- dezen div dient om de achtergrond te maken. -->
+<div fit>
+  	<div class="background">
+  		<div layout horizontal center center-justified></div>
+  	</div>
+</div>
+
+<core-animated-pages selected="{{selectedSection}}" transitions="slide-from-right" fit>
+  <section>
+  	<!-- in deze div zetten we de content -->
+    <div fit vertical layout center center-justified>
+
+  	<div layout horizontal center>
+  		<div layout vertical center>
+  			<button on-tap="{{selectMale}}">
+  				<svg class="{{ { geklikt: genderMale } | tokenList}}" id="svgMale" version="1.1" width="120px" height="120px" viewBox="-76 0 290 290">
+					<path d="M114.403,106.404l-0.021-0.185c-0.028-0.236-0.853-20.794-31.084-22.725
+			c-0.116-0.049-0.196-0.099-0.196-0.151l-3.854,0.004c-0.207-0.002-0.399-0.013-0.61-0.013l0.006,0.014l-17.685,0.013l0.013-0.025
+			c-0.438,0-0.849,0.02-1.276,0.026l-2.48,0.002c0,0-0.498,0.059-1.244,0.153c-29.9,2.062-30.715,22.467-30.745,22.703l-0.019,0.185
+			L20.183,159.7c-0.318,3.396,2.125,6.42,5.492,6.84c0.062,0.008,0.123,0.014,0.188,0.021c3.463,0.332,6.533-2.205,6.859-5.666
+			l4.705-49.907c0.443-1.74,0.83-5.067,5.434-4.493c2.848,0.356,3.354,4.013,3.436,5.688c-4.912,35.475-14.074,90.673-14.074,90.673
+			c0.727,0.129,7.98,0.217,17.712,0.264c0.185,7.695,0.432,15.529,0.432,23.06c0,11.793,0,30.178,0,30.178h0.056
+			c0,4.235,4.729,7.67,8.965,7.67c4.234,0,7.67-3.435,7.67-7.67c0-0.037-0.006-0.074-0.008-0.111v-52.709
+			c0,0-0.025-0.147-0.014-0.375c1.846,0,3.698,0,5.543-0.002c0.01,0.229-0.016,0.377-0.016,0.377v52.82h0.004
+			c0.012,4.227,4.735,7.649,8.965,7.649c4.229,0,7.656-3.424,7.668-7.649h0.047c0,0,0-18.385,0-30.178
+			c0-7.533,0.249-15.373,0.432-23.07c9.598-0.053,16.733-0.146,17.467-0.279c0,0-8.971-54.387-13.877-89.875l0.033,0.066
+			c0,0-0.254-6.062,3.451-6.525c4.604-0.575,4.99,2.753,5.434,4.493l4.705,49.907c0.325,3.461,3.396,5.998,6.859,5.666
+			c0.062-0.006,0.125-0.013,0.188-0.021c3.365-0.42,5.812-3.442,5.49-6.84L114.403,106.404z"/>
+					<circle cx="70.577" cy="44.922" r="26.062"/>
+				</svg>
+  			</button>	
+  		</div>
+
+
+  		<div layout vertical center>
+  			<button id="svgFemale" on-tap="{{selectFemale}}">
+  				<svg class="{{ { geklikt: genderFemale } | tokenList}}" x="0px" y="0px"
+	 width="120px" height="120px" viewBox="-76 0 290 290">
+					<path d="M86.9,80.344c-0.578,0-35.318,0-35.88,0c-33.577,0-33.966,26.63-33.966,26.898l1.687,57.425
+			c0.107,3.648,3.098,6.532,6.723,6.532c0.067,0,0.135-0.002,0.202-0.003c3.714-0.109,6.637-3.209,6.527-6.926l-1.567-53.309
+			c0.045,0.18,0.077,0.285,0.077,0.285s-0.315-6.506,6.198-6.506c3.878,0,4.241,6.506,4.241,6.506s0.04-0.072,0.104-0.188
+			c0.355,17.874,1.587,41.464,1.587,54.305c0,14.988,0.809,31.334,0.809,46.654c0,15.319,0,39.197,0,39.197h0.07
+			c0,5.502,6.145,9.962,11.645,9.962c5.502,0,9.963-4.46,9.963-9.962c0-0.05-0.007-0.097-0.008-0.146v-68.458
+			c0,0-0.532-3.07,3.581-3.468c4.113,0.396,3.582,3.468,3.582,3.468v68.604h0.002c0.016,5.489,6.153,9.937,11.646,9.937
+			s9.944-4.446,9.96-9.937h0.061c0,0,0-23.878,0-39.197c0-15.32,0.811-31.666,0.811-46.654c0-12.71,1.207-35.948,1.574-53.753
+			c0.066,0.121,0.109,0.197,0.109,0.197s0.375-6.692,4.362-6.692c4.956,0,6.065,3.66,6.31,5.565l-1.578,53.589
+			c-0.107,3.717,2.814,6.815,6.528,6.926c0.067,0.001,0.136,0.003,0.202,0.003c3.624,0,6.615-2.886,6.723-6.532l1.684-57.228
+			l0.003-0.198C120.868,106.973,120.48,80.344,86.9,80.344z"/>
+				<circle cx="69.803" cy="42.072" r="26.062"/>
+				</svg>
+  			</button>
+  		</div>
+
+  	</div>
+
+  	<div class="bottom">
+  		<button class="nextbutton">Verder</button>
+  	</div>
+</div>
+
+  </section>
+  <section>
+  	Volgende stap
+  </section>
+  <section></section>
+</core-animated-pages>
+</template>
+<script>
+    (function () {
+      'use strict';
+
+      Polymer({
+
+        ready: function(){
+          this.selectedSection = 0;
+          this.genderMale = false;
+          this.genderFemale = false;
+        },
+
+        selectMale: function(e){
+        	console.log('Save my bebeh > Male');
+        	this.globals.myGender = 'male';
+			console.log(this.globals);
+          	this.genderMale = true;
+          	this.genderFemale = false;
+        },
+
+        selectFemale: function(e){
+        	console.log('Save my bebeh > Female');
+        	this.globals.myGender = 'female';
+        	console.log(this.globals);
+        	this.genderMale = false;
+          	this.genderFemale = true;
+        },
+
+
+      });
+     })();
+</script>
+</polymer-element>

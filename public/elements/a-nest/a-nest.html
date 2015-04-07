@@ -6,7 +6,6 @@
 <link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../../bower_components/firebase-element/firebase-element.html">
-<link href="../../../../bower_components/app-router/app-router.html" rel="import">
 
 <link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
 <link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
@@ -14,20 +13,20 @@
 
 <polymer-element name="a-nest" attributes="">
 <template>
-	<link rel="stylesheet" href="../../styles/css/style.css" />
+<link rel="stylesheet" href="../../styles/css/style.css" />
 
-	<aos-globals values="{{globals}}"></aos-globals>
+<aos-globals values="{{globals}}"></aos-globals>
 
-    <!-- Check of er een user is aangemeld -->
-    <core-ajax method="GET" id="checkStatus" handleAs="json" url="/user" response="{{checkstatusresponse}}" on-core-response="{{checkstatus}}" auto></core-ajax>
+<!-- Check of er een user is aangemeld -->
+<core-ajax method="GET" id="checkStatus" handleAs="json" url="/user" response="{{checkstatusresponse}}" on-core-response="{{checkstatus}}"></core-ajax>
 
-	<core-ajax
-	id="logout" 
-	url="/logout"
-	handleAs="json"
-	response="{{logoutresp}}"
-	on-core-response="{{logoutresponse}}">
-	</core-ajax>
+<core-ajax
+id="logout" 
+url="/logout"
+handleAs="json"
+response="{{logoutresp}}"
+on-core-response="{{logoutresponse}}">
+</core-ajax>
 
 <core-scroll-header-panel>
 <core-toolbar>
@@ -40,6 +39,7 @@
 	<div vertical layout center on-tap="{{goProfile}}" hero-id="hero" hero>
 		<a-avatar user="{{gsm}}" class="avatar"></a-avatar>
 		<h3>{{globals.user.nick}}</h3>
+        <h4>{{globals.user.gsm}}</h4>
 		<core-icon-button icon="lock-open"></core-icon-button>
 	</div>
 	<!-- een voorbeeld van een notificatie -->
@@ -62,21 +62,25 @@
 <script>
 	Polymer({
 		ready: function() {
-
             console.log('Glbals: ',this.globals);
             this.$.checkStatus.go();
 		},
 
         checkstatusresponseChanged: function(){
-      if(this.checkstatusresponse.status=='E'){
-        console.log('user is niet aangemeld.', this.checkstatusresponse.user);
-        //this.fire("router-go", {naarwaar: "/"});
-      } else {
-        console.log('user is WEL aangemeld.', this.checkstatusresponse.user);
-        this.globals.user = this.checkstatusresponse.status;
-        //this.fire("router-go", {naarwaar: "/home"});
-      };
-    },
+            if(this.checkstatusresponse.status=='E'){
+                console.log('user is niet aangemeld.', this.checkstatusresponse.user, this.checkstatusresponse.cookies);
+                this.fire("router-go", {naarwaar: "/"});
+            } else {
+                console.log('user is WEL aangemeld.', this.checkstatusresponse.user, this.checkstatusresponse.cookies );
+                this.globals.user = this.checkstatusresponse.user;
+                //this.fire("router-go", {naarwaar: "/home"});
+                if(this.globals.user.firstuse){
+          this.fire("router-go", {naarwaar: "/first"});
+        } else {
+          this.fire("router-go", {naarwaar: "/home"});
+        }
+            };
+        },
 
 		routeSelectedChanged: function(){
 		  console.log(this.routeSelected);
