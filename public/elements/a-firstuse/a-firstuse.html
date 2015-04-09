@@ -1,0 +1,102 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../../../bower_components/core-animated-pages/transitions/slide-from-right.html">
+<link rel="import" href="../../../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
+<link rel="import" href="../../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
+<link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../../bower_components/firebase-element/firebase-element.html">
+
+<link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
+<link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
+<link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
+
+<polymer-element name="a-firstuse" attributes="">
+<template>
+  <link rel="stylesheet" href="../../styles/css/firstuse.css" />
+
+
+  <aos-globals values="{{globals}}"></aos-globals>
+
+  <div vertical layout center fit>
+
+    <div id="object" vertical layout center center-justified>
+        <div id="vraagteken"><img src="../../images/AVATAR/vraagteken.svg"></div>
+        <a-avatar user="{{globals.user}}"></a-avatar>
+    </div>
+    <div id="selektor" vertical layout center center-justified flex>
+      <div horizontal layout>
+        <button flex on-tap="{{selectMale}}" class="circeled {{ { geklikt: genderMale } | tokenList }}">
+          <img src="../../images/btn_male.svg" class="btn_gender" />
+        </button>
+        <button flex on-tap="{{selectFemale}}" class="circeled {{ { geklikt: genderFemale } | tokenList }}">
+          <img src="../../images/btn_female.svg" class="btn_gender" />
+        </button>
+      </div>
+    </div>
+    <div id="navigator" horizontal layout>
+      <button disabled flex on-tap="{{terug}}" id="btn_terug"><img src="../../images/pijl_terug.svg" class="pijltjes" /></button>
+      <button disabled flex on-tap="{{verder}}" id="btn_verder"><img src="../../images/pijl_verder.svg" class="pijltjes" /></button>
+    </div>
+
+  </div>
+
+</template>
+<script>
+
+  (function () {
+
+
+    Polymer({
+
+      ready: function(){
+        this.selectedSection = 0;
+        this.genderMale = false;
+        this.genderFemale = false;
+
+        var that = this;
+
+        this.addEventListener('setGender', function(e){
+          console.log('gender set to: ', e.detail.message);
+          that.globals.user.gender = e.detail.message;
+        });
+      },
+
+      verder: function(){
+        console.log('verder?');
+        this.selectedSection++;
+      },
+
+      terug: function(){
+        console.log('terug?');
+        this.selectedSection--;
+      },
+
+      selectMale: function(e){
+       this.genderMale = true;
+       this.genderFemale = false;
+       this.$.vraagteken.hidden = true;
+       this.$.vrouke.hidden = true;
+       this.$.manneke.hidden = false;
+       this.$.btn_verder.disabled = false;
+       //this.globals.user.avatar.gezicht = '';
+       this.fire('setGender', {message: 'male'});
+     },
+
+     selectFemale: function(e){
+       this.genderMale = false;
+       this.genderFemale = true;
+       this.$.vraagteken.hidden = true;
+       this.$.manneke.hidden = true;
+       this.$.vrouke.hidden = false;
+       this.$.btn_verder.disabled = false;
+       this.fire('setGender', {message: 'female'});
+     },
+
+     
+
+   });
+  })();
+</script>
+</polymer-element>
