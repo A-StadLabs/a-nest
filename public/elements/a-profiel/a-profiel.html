@@ -1,6 +1,10 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
 <link rel="import" href="../../../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../../../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../../../../bower_components/core-item/core-item.html">
 <link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
 
 <polymer-element name="a-profiel" attributes="">
@@ -14,68 +18,100 @@
 		<span flex></span>
 	</core-toolbar>
 	<div vertical layout center>
-		<a-avatar user="{{gsm}}" avatar="{{avatar}}"></a-avatar>
+		<a-avatar user="{{globals.user.gsm}}" avatar="{{avatar}}"></a-avatar>
 	</div>
+
+    <core-menu valueattr="label" selected="{{categorie}}">
+      <core-item label="snitten"></core-item>
+      <core-item label="gezichten"></core-item>
+      <core-item label="accs"></core-item>
+    </core-menu>
 	
-	<div>
+    <core-pages selected="{{categorie}}" valueattr="cat">
+	<section cat="snitten">
 		<template repeat="{{i in snitten}}">
-			<img src="{{i.src}}" on-tap="{{selectSnit}}" width="80" height="105">
+			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
 		</template>
-	</div>
+	</section>
 	
-	<div>
+	<section cat="gezichten">
 		<template repeat="{{i in gezichten}}">
-			<img src="{{i.src}}" on-tap="{{selectGezicht}}" width="80" height="105">
+			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
 		</template>
-	</div>
+	</section>
 
-	<div>
-		<template repeat="{{i in oogaccs}}">
-			<img src="{{i.src}}" on-tap="{{selectOogacc}}" width="80" height="105">
+	<section cat="accs">
+		<template repeat="{{i in accs}}">
+			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
 		</template>
-	</div>
+	</section>
 
-	<div>
+	<section cat="baarden">
 		<template repeat="{{i in baarden}}">
-			<img src="{{i.src}}" on-tap="{{selectBaard}}" width="80" height="105">
+			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
 		</template>
-	</div>
+	</section>
 
-	<div>
+	<section cat="snorren">
 		<template repeat="{{i in snorren}}">
-			<img src="{{i.src}}" on-tap="{{selectSnor}}" width="80" height="105">
+			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
 		</template>
-	</div>
+	</section>
+
+    <section cat="tops">
+        <template repeat="{{i in tops}}">
+            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+        </template>
+    </section>
+
+    <section cat="bottoms">
+        <template repeat="{{i in bottoms}}">
+            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+        </template>
+    </section>
+
+    <section cat="lijfs">
+        <template repeat="{{i in lijfs}}">
+            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+        </template>
+    </section>
+
+    <section cat="shoess">
+        <template repeat="{{i in shoess}}">
+            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+        </template>
+    </section>
+
+    <section cat="oogmonds">
+        <template repeat="{{i in oogmonds}}">
+            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+        </template>
+    </section>
+    </core-pages>
 
 </template>
 <script>
-    Polymer({
-    	goHome: function(){
-    		this.fire("router-go", { naarwaar: "/home" });
-    	},
+var avatar = [];
 
-    	handleResponseCheck: function(){
-        console.log(this.responseCheck);
-        if(this.responseCheck.userstatus!='E'){
-          this.user = true;
-          this.gsm = this.responseCheck.gsm;
-          this.fire("show-toast", { bericht: "Aangemeld" });
-      	} else {
-      	  this.fire("show-toast", { bericht: "Niet aangemeld" });
-      	  this.fire("router-go", {naarwaar: "/"});
-      	}
-      console.log(this.user, this.gsm);
-    },
+    Polymer({
 
     	ready: function(){
 
             //console.log(JSON.stringify(this.globals));
+            this.categorie = "lijfs";
+            avatar = this.globals.user.avatar;
+            //this.globals.user.avatar = avatar;
 
-    		var gezichten = [];
+     		var gezichten = [];
     		var snitten = [];
     		var snorren = [];
     		var baarden = [];
-    		var oogaccs = [];
+    		var accs = [];
+            var oogmonds = [];
+            var lijfs = [];
+            var tops = [];
+            var bottoms = [];
+            var shoess = [];
 
     		var that = this;
 
@@ -95,43 +131,50 @@
     				case "snor":
     					snorren.push({"item": snapshot.val().item, "src": snapshot.val().url});
     					break;
-    				case "oogacc":
-    					oogaccs.push({"item": snapshot.val().item, "src": snapshot.val().url});
+    				case "acc":
+    					accs.push({"item": snapshot.val().item, "src": snapshot.val().url});
     					break;
+                    case "oogmond":
+                        oogmonds.push({"item": snapshot.val().item, "src": snapshot.val().url});
+                        break;
+                    case "lijf":
+                        lijfs.push({"item": snapshot.val().item, "src": snapshot.val().url});
+                        break;
+                    case "top":
+                        tops.push({"item": snapshot.val().item, "src": snapshot.val().url});
+                        break;
+                    case "bottom":
+                        bottoms.push({"item": snapshot.val().item, "src": snapshot.val().url});
+                        break;
+                    case "shoes":
+                        shoess.push({"item": snapshot.val().item, "src": snapshot.val().url});
+                        break;
     			};
 
     			that.gezichten = gezichten;
     			that.snorren = snorren;
     			that.baarden = baarden;
-    			that.oogaccs = oogaccs;
+    			that.accs = accs;
     			that.snitten = snitten;
+                that.tops = tops;
+                that.bottoms = bottoms;
+                that.shoess = shoess;
+                that.lijfs = lijfs;
+                that.oogmonds = oogmonds;
     		});
 
     	},
 
-    	selectSnit: function(e){
-    		this.avatar.snit = e.target.getAttribute('src');
+    	selectItem: function(e){
+            avatar[e.target.getAttribute('cat')] = e.target.getAttribute('src');
+            this.globals.user.avatar = avatar;
+            console.log('item: ', e.target.getAttribute('cat'));
     	},
 
-    	selectGezicht: function(e){
-            console.log('set gezicht');
-    		this.avatar.gezicht = e.target.getAttribute('src');
-    	},
-
-    	selectOogacc: function(e){
-    		this.avatar.oogacc = e.target.getAttribute('src');
-    	},
-
-    	selectBaard: function(e){
-    		this.avatar.baard = e.target.getAttribute('src');
-    	},
-
-    	selectSnor: function(e){
-    		this.avatar.snor = e.target.getAttribute('src');
-    	}
-
+        goHome: function(){
+            this.fire("router-go", {naarwaar: "/home"});
+        }
     	
-
     });
 
 </script>

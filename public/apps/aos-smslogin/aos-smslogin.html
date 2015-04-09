@@ -118,7 +118,7 @@
 
     findcoderesponseChanged: function(){
       console.log('Ik heb iets teruggekregen: ', this.findcoderesponse);
-      this.globals.user = this.findcoderesponse;
+      this.globals.user = this.findcoderesponse.user;
       this.fire("router-go", {naarwaar: "/home"});
     },
 
@@ -129,24 +129,24 @@
 
     // Hier checken we gewoon of de user al bestaat of niet.
 
-    handleResponseCheck: function(){
-        console.log(this.responseCheck);
-        if(this.responseCheck.userstatus!='E'){
-          //this.fire("router-go", {naarwaar: "/home"});
-        //this.section = 2;
-        } else {
-          //this.fire("router-go",{ naarwaar: "/"});
-        };
-      console.log(this.user);
-    },
+    // handleResponseCheck: function(){
+    //     console.log(this.responseCheck);
+    //     if(this.responseCheck.userstatus!='E'){
+    //       //this.fire("router-go", {naarwaar: "/home"});
+    //     //this.section = 2;
+    //     } else {
+    //       //this.fire("router-go",{ naarwaar: "/"});
+    //     };
+    //   console.log(this.user);
+    // },
 
 
-    handleResponseCodeCheck: function(){
-      console.log(this.responseCode);
-      this.$.globals.user = this.responseCode;
-      this.user = true;
-      this.fire("router-go", { naarwaar: '/home' });
-    },
+    // handleResponseCodeCheck: function(){
+    //   console.log(this.responseCode);
+    //   this.$.globals.user = this.responseCode;
+    //   this.user = true;
+    //   this.fire("router-go", { naarwaar: '/home' });
+    // },
 
     logout: function(){
       this.$.logout.go();

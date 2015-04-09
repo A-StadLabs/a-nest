@@ -3,30 +3,47 @@
 <link rel="import" href="../../elements/aos-globals/aos-globals.html">
 
 
-<polymer-element name="a-avatar" attributes="avatar user disable">
+<polymer-element name="a-avatar" attributes="user">
   <template>
     <link rel="stylesheet" href="a-avatar.css">
 
     <aos-globals values="{{globals}}"></aos-globals>
 
-    <firebase-element location="https://blazing-fire-6426.firebaseio.com/user/{{gsm}}/avatar/" on-data-change="{{getAvatar}}" data="{{avatar}}" id="fbavatar"></firebase-element>
+    <firebase-element location="https://blazing-fire-6426.firebaseio.com/user/{{globals.user.gsm}}/" on-data-change="{{getAvatar}}" data="{{globals.user}}" id="fbavatar"></firebase-element>
+    
     <div class="gezicht">
+    <div id="lijf" class="fixit">
+      <img src="{{globals.user.avatar.lijf}}">
+    </div>
+    <div id="bottom" class="fixit">
+      <img src="{{globals.user.avatar.bottom}}">
+    </div>
+    <div id="shoes" class="fixit">
+      <img src="{{globals.user.avatar.shoes}}">
+    </div>
+    <div id="top" class="fixit">
+      <img src="{{globals.user.avatar.top}}">
+    </div>
     <div id="basisgezicht" class="fixit">
-      <img src="{{avatar.gezicht}}">
-    </div>
-    <div id="snit" class="fixit">
-      <img src="{{avatar.snit}}">
-    </div>
-    <div id="oogaccessoire" class="fixit">
-      <img src="{{avatar.oogacc}}">
-    </div>
-    <div id="snor" class="fixit">
-      <img src="{{avatar.snor}}">
+      <img src="{{globals.user.avatar.gezicht}}">
     </div>
     <div id="baard" class="fixit">
-      <img src="{{avatar.baard}}">
+      <img src="{{globals.user.avatar.baard}}">
     </div>
-    <p>hallo {{user}} {{avatar.gender}}</p>
+    <div id="snor" class="fixit">
+      <img src="{{globals.user.avatar.snor}}">
+    </div>
+    <div id="snit" class="fixit">
+      <img src="{{globals.user.avatar.snit}}">
+    </div>
+    <div id="oogmond" class="fixit">
+      <img src="{{globals.user.avatar.oogmond}}">
+    </div>
+    <div id="acc" class="fixit">
+      <img src="{{globals.user.avatar.acc}}">
+    </div>
+    
+
   </div>
   </template>
   <script>
@@ -36,6 +53,7 @@
       Polymer({
 
         ready: function(){
+          //this.avatar = [];
           console.log('user vanuit a-avatar: ', JSON.stringify(this.globals));
         }
 

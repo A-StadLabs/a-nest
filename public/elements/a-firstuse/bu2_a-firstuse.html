@@ -1,5 +1,5 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../../../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../../../../bower_components/core-pages/core-pages.html">
 <link rel="import" href="../../../../bower_components/core-animated-pages/transitions/slide-from-right.html">
 <link rel="import" href="../../../../bower_components/core-icon-button/core-icon-button.html">
 <link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
@@ -18,18 +18,18 @@
 
   <aos-globals values="{{globals}}"></aos-globals>
 
-  <div fit layout vertical layout>
+  <div layout vertical layout>
     <div>
-      <a-avatar user="{{globals.user.gsm}}" avatar="{{avatar}}"></a-avatar>
+      <a-avatar user="{{globals.user.gsm}}" user="{{avatar}}" id="avatar"></a-avatar>
     </div>
     <div flex>
-      <core-animated-pages selected="{{selectedSection}}" transitions="slide-from-right" fit>
+      <core-pages selected="{{selectedSection}}">
       <section>
-      <div fit vertical layout center center-justified>
+      <div vertical layout center center-justified>
           <div layout horizontal center>
             <div layout vertical center>
-              <button on-tap="{{selectMale}}">
-                <svg class="{{ { geklikt: genderMale } | tokenList}}" id="svgMale" version="1.1" width="120px" height="120px" viewBox="-76 0 290 290">
+              <button on-tap="{{selectFemale}}">
+                <svg class="{{ { geklikt: genderFemale } | tokenList }}" id="svgMale" version="1.1" width="120px" height="120px" viewBox="-76 0 290 290">
                   <path d="M114.403,106.404l-0.021-0.185c-0.028-0.236-0.853-20.794-31.084-22.725
                   c-0.116-0.049-0.196-0.099-0.196-0.151l-3.854,0.004c-0.207-0.002-0.399-0.013-0.61-0.013l0.006,0.014l-17.685,0.013l0.013-0.025
                   c-0.438,0-0.849,0.02-1.276,0.026l-2.48,0.002c0,0-0.498,0.059-1.244,0.153c-29.9,2.062-30.715,22.467-30.745,22.703l-0.019,0.185
@@ -49,8 +49,8 @@
 
 
             <div layout vertical center>
-              <button id="svgFemale" on-tap="{{selectFemale}}">
-                <svg class="{{ { geklikt: genderFemale } | tokenList}}" x="0px" y="0px"
+              <button on-tap="{{selectMale}}">
+                <svg class="{{ { geklikt: genderMale } | tokenList}}" x="0px" y="0px"
                 width="120px" height="120px" viewBox="-76 0 290 290">
                 <path d="M86.9,80.344c-0.578,0-35.318,0-35.88,0c-33.577,0-33.966,26.63-33.966,26.898l1.687,57.425
                 c0.107,3.648,3.098,6.532,6.723,6.532c0.067,0,0.135-0.002,0.202-0.003c3.714-0.109,6.637-3.209,6.527-6.926l-1.567-53.309
@@ -66,32 +66,34 @@
               </svg>
             </button>
           </div>
-
         </div>
-
       </div>
 
     </section>
+
     <section>
       Volgende stap
     </section>
-    <section></section>
-  </core-animated-pages>
+
+    <section>
+      
+    </section>
+    
+  </core-pages>
 </div>
 <div end>
   <div horizontal layout>
-    <button class="nextbutton" flex>terug</button>
-    <button class="nextbutton" flex>verder</button>
+    <button class="nextbutton" flex on-tap="{{terug}}">terug</button>
+    <button class="nextbutton" flex on-tap="{{verder}}">verder</button>
   </div>
 </div>
 </div>
-<!-- 
 
--->
 </template>
 <script>
+
   (function () {
-    'use strict';
+
 
     Polymer({
 
@@ -99,26 +101,46 @@
         this.selectedSection = 0;
         this.genderMale = false;
         this.genderFemale = false;
+        var that = this;
+
+        this.addEventListener('setGender', function(e){
+          console.log('gender set to: ', e.detail.message);
+          that.globals.user.gender = e.detail.message;
+        });
+      },
+
+      verder: function(){
+        console.log('verder?');
+        this.selectedSection++;
+      },
+
+      terug: function(){
+        console.log('verder?');
+        this.selectedSection--;
       },
 
       selectMale: function(e){
-       console.log('Save my bebeh > Male');
-       this.globals.myGender = 'male';
-       console.log(this.globals);
        this.genderMale = true;
        this.genderFemale = false;
-       this.avatar.gender = "male";
+       this.fire('setGender', {message: 'male'});
      },
 
      selectFemale: function(e){
-       console.log('Save my bebeh > Female');
-       this.globals.myGender = 'female';
-       console.log(this.globals);
        this.genderMale = false;
        this.genderFemale = true;
-       this.avatar.gender = "male";
+       this.fire('setGender', {message: 'female'});
      },
 
+     checkstatusresponseChanged: function(){
+            if(this.checkstatusresponse.status=='E'){
+                console.log('user is niet aangemeld.', this.checkstatusresponse.user, this.checkstatusresponse.cookies);
+                this.fire("router-go", {naarwaar: "/"});
+            } else {
+                console.log('user is WEL aangemeld.');
+                this.globals.user = this.checkstatusresponse.user;
+                //this.fire("router-go", {naarwaar: "/home"});
+            }
+        },
 
    });
   })();

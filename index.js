@@ -28,7 +28,7 @@ app.listen(app.get('port'), function() {
 
 // check userstatus
 app.get('/user', function(req, res) {
-  //console.log('Sessie? '+ req.session.userobject);
+  console.log('Sessie? '+ req.session.userobject);
   if (req.session.userobject) {
     res.send({ "status": "OK", "user": req.session.userobject });
     console.log(req.session.userobject);

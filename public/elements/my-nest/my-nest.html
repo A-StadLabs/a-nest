@@ -1,0 +1,53 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/app-router/app-router.html">
+<link rel="import" href="../../../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
+<link rel="import" href="../../../../elements/a-firstuse/a-firstuse.html">
+<polymer-element name="my-nest" attributes="">
+<template>
+<link rel="stylesheet" href="../../styles/css/style.css" />
+
+<aos-globals values="{{globals}}"></aos-globals>
+
+<!-- Check of er een user is aangemeld -->
+<core-ajax method="GET" id="checkStatus" handleAs="json" url="/user" response="{{checkstatusresponse}}" on-core-response="{{checkstatus}}"></core-ajax>
+
+<app-router id="router">
+  <app-route path="/login" import="/apps/aos-smslogin/aos-smslogin.html"></app-route>
+  <app-route path="/first" import="/elements/a-firstuse/a-firstuse.html"></app-route>
+  <app-route path="/home" import="/elements/a-nest/a-nest.html"></app-route>
+  <app-route path="/profiel" import="/elements/a-profiel/a-profiel.html"></app-route>
+  <app-route path="/upload" import="/elements/aprofiel-uploader/aprofiel-uploader.html"></app-route>
+</app-router>
+
+</template>
+<script>
+	Polymer({
+		ready: function() {
+			this.$.checkStatus.go();
+
+			var that = this;
+
+			this.addEventListener("router-go", function(e){
+				console.log('Where you wanna go? ', e.detail.naarwaar);
+				that.$.router.go(e.detail.naarwaar);
+			});
+		},
+
+		checkstatusresponseChanged: function(){
+            if(this.checkstatusresponse.status=='E'){
+                console.log('user is niet aangemeld.');
+                this.$.router.go('/login');
+            } else {
+                console.log('Awel, ik heb ne goeie zwemmer!', this.checkstatusresponse);
+                this.globals.user = this.checkstatusresponse.user;
+                if(this.globals.user.firstuse===true){
+                	this.$.router.go('/first');
+        		} else {
+        			this.$.router.go('/home');
+        		}
+            };
+        },
+	});
+</script>
+</polymer-element>

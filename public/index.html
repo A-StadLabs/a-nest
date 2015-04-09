@@ -17,26 +17,16 @@
   <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
   <!-- endbuild-->
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-  <link rel="import" href="elements/elements.html">
+  <link rel="import" href="elements/my-nest/my-nest.html">
   <!-- endbuild-->
 </head>
 
 <body unresolved fullbleed>
-
-<aos-globals values="{{globals}}" id="globals"></aos-globals>
-
-<app-router id="router">
-  <app-route path="/" import="/apps/aos-smslogin/aos-smslogin.html"></app-route>
-  <app-route path="/first" import="/elements/a-firstuse/a-firstuse.html"></app-route>
-  <app-route path="/home" import="/elements/a-nest/a-nest.html"></app-route>
-  <app-route path="/profiel" import="/elements/a-profiel/a-profiel.html"></app-route>
-  <app-route path="/upload" import="/elements/aprofiel-uploader/aprofiel-uploader.html"></app-route>
-</app-router>
-
-<paper-toast id="toast" text="{{toastText}}" duration="5000"></paper-toast>
-
+<template is="auto-binding" id="page-template">
+<my-nest></my-nest>
+</template>
 <!-- build:js scripts/app.js -->
-<script src="scripts/app.js"></script>
+  <script src="scripts/app.js"></script>
 <!-- endbuild-->
 </body>
 </html>

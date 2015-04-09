@@ -1,7 +1,11 @@
 :host {
   display: block;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  height: 100%;
+  background-image: url('../../images/bg_first.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%; }
 
 html, body {
   height: 100%;
@@ -9,9 +13,42 @@ html, body {
   font-family: 'Open Sans', sans-serif;
   background-color: #A5E5FA; }
 
-.background {
-  height: 48%;
-  background-color: #A5E5FA; }
+#navigator {
+  height: 90px;
+  width: 100%;
+  border-top: 1px solid black; }
+
+.avatar {
+  height: 340px;
+  width: 190px;
+  background-color: red; }
+
+.pijltjes {
+  height: 50px; }
+
+button:disabled {
+  opacity: 0.3; }
+
+.btn_gender {
+  width: 45px;
+  height: 45px; }
+
+.circeled {
+  border-radius: 50%;
+  border: 1px solid white;
+  background-color: #E5F7FD;
+  height: 45px;
+  width: 45px;
+  padding: 0;
+  margin: 0px 10px 0px 10px; }
+
+.selectpijl {
+  height: 10px;
+  width: 10px; }
+
+.geklikt {
+  background-color: white;
+  border: 1px solid black; }
 
 h1 {
   font-size: 100px;
@@ -41,7 +78,7 @@ svg:active {
   fill: #006A86; }
 
 img {
-  height: 120px; }
+  height: 340px; }
 
 .geklikt {
   fill: #006A86; }

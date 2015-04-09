@@ -6,7 +6,6 @@
 <link rel="import" href="../../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../../bower_components/firebase-element/firebase-element.html">
-
 <link rel="import" href="../../../../apps/aos-smslogin/aos-smslogin.html">
 <link rel="import" href="../../../../elements/a-avatar/a-avatar.html">
 <link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
@@ -17,8 +16,7 @@
 
 <aos-globals values="{{globals}}"></aos-globals>
 
-<!-- Check of er een user is aangemeld -->
-<core-ajax method="GET" id="checkStatus" handleAs="json" url="/user" response="{{checkstatusresponse}}" on-core-response="{{checkstatus}}"></core-ajax>
+
 
 <core-ajax
 id="logout" 
@@ -31,17 +29,17 @@ on-core-response="{{logoutresponse}}">
 <core-scroll-header-panel>
 <core-toolbar>
 <span flex></span>
-<core-icon-button icon="exit-to-app" on-tap="{{logout}}"></core-icon-button>
+<core-icon-button icon="exit-to-app" on-tap="{{logout}}">l</core-icon-button>
 </core-toolbar>
 
 <div>
-	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{gsm}}/" on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
-	<div vertical layout center on-tap="{{goProfile}}" hero-id="hero" hero>
-		<a-avatar user="{{gsm}}" class="avatar"></a-avatar>
-		<h3>{{globals.user.nick}}</h3>
-        <h4>{{globals.user.gsm}}</h4>
-		<core-icon-button icon="lock-open"></core-icon-button>
+	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{globals.user.gsm}}/" on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
+	<div vertical layout center on-tap="{{goProfile}}">
+		<a-avatar user="{{gsm}}"></a-avatar>
 	</div>
+
+
+    <button on-tap="{{logout}}">logout</button>
 	<!-- een voorbeeld van een notificatie -->
 	<div vertical layout center id="cards">
 		<template repeat="{{ i in cards }}">
@@ -62,8 +60,8 @@ on-core-response="{{logoutresponse}}">
 <script>
 	Polymer({
 		ready: function() {
-            console.log('Glbals: ',this.globals);
-            this.$.checkStatus.go();
+            console.log('Globals.user: ',this.globals.user);
+            
 		},
 
         checkstatusresponseChanged: function(){
@@ -97,7 +95,7 @@ on-core-response="{{logoutresponse}}">
 		demo: function(e){
 			e.target.parentNode.removeChild(e.target);
     		// set card to read
-    		var gsm = this.gsm;
+    		var gsm = this.globals.user.gsm;
     		var cardid = e.target.getAttribute('cardid');
     		var readCard = new Firebase("https://blazing-fire-6426.firebaseio.com/cards/"+gsm+"/"+cardid+"/read/");
     		readCard.set(true);
@@ -105,7 +103,7 @@ on-core-response="{{logoutresponse}}">
 
     	genCards: function(){
     		console.log(this.gsm);
-    		var gsm = this.gsm;
+    		var gsm = this.globals.user.gsm;
     		var genCards = new Firebase("https://blazing-fire-6426.firebaseio.com/cards/"+gsm+"/");
     		genCards.push({"title":"Groene gevel premie", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false});
     		genCards.push({"title":"Kabouterbos niet bereikbaar", "body":"Wist je dat je een premie kan krijgen om jouw gevel groener te maken?", "url":"https://www.antwerpen.be/nl/info/52d5051f39d8a6ec798b47e4/tegeltuintje-aanleggen", "type": 1, "read": false, "image": "http://www.online-image-editor.com//styles/2014/images/example_image.png"});
@@ -134,19 +132,17 @@ on-core-response="{{logoutresponse}}">
     		this.cards = cards;
     	},
 
-    	save: function(){
-    		var gsm = this.gsm;
-    		var firstname = this.firstname;
-    		var lastname = this.lastname;
-    		var nick = this.nick;
-    		console.log('about to save: ', firstname, lastname, nick);
-    		var saveFb = new Firebase("https://blazing-fire-6426.firebaseio.com/user/"+gsm+"/");
-    		saveFb.set({"firstname": firstname, "lastname": lastname, "nick": nick})
-    	},
 
     	logout: function(){
     		this.$.logout.go();
-    	}
+    	},
+
+        logoutresponse: function(){
+            console.log('lgout?', this.logoutresp);
+            this.fire("router-go", {naarwaar: "/login"});
+        }
+
+        
 
     });
 </script>
