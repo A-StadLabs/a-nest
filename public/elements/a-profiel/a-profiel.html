@@ -3,8 +3,12 @@
 <link rel="import" href="../../../../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../../../../bower_components/core-menu/core-menu.html">
 <link rel="import" href="../../../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../../../bower_components/core-drawer-panel/core-drawer-panel.html">
+<link rel="import" href="../../../../bower_components/core-header-panel/core-header-panel.html">
 <link rel="import" href="../../../../bower_components/core-toolbar/core-toolbar.html">
 <link rel="import" href="../../../../bower_components/core-item/core-item.html">
+
+<link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../../elements/aos-globals/aos-globals.html">
 
 <polymer-element name="a-profiel" attributes="">
@@ -13,81 +17,132 @@
 	
 	<aos-globals values="{{globals}}"></aos-globals>
 
+    <core-drawer-panel>
+      <core-header-panel drawer>
+      <core-toolbar>Kies</core-toolbar>
+      <core-menu valueattr="cat" selected="{{categorie}}">
+        <core-item cat="gezichten" src="../../images/icn-gezicht.svg"></core-item>
+        <core-item cat="snitten" src="../../images/icn-snit.svg"></core-item>
+        <core-item cat="baarden" src="../../images/icn-baard.svg"></core-item>
+        <core-item cat="tops" src="../../images/icn-top.svg"></core-item>
+        <core-item cat="bottoms" src="../../images/icn-bottom.svg"></core-item>
+        <core-item cat="shoes" src="../../images/icn-shoes.svg"></core-item>
+        <core-item cat="accessoires" src="../../images/icn-acc.svg"></core-item>
+      </core-menu>
+       <!--  <paper-tabs valueattr="label" selected="{{categorie}}">
+          <paper-tab label="gezichten"><img src="../../images/icn-gezicht.svg" /></paper-tab>
+          <paper-tab label="snitten" ><img src="../../images/icn-snit.svg" /></paper-tab>
+          <paper-tab label="baarden"><img src="../../images/icn-baard.svg" /></paper-tab>
+          <paper-tab label="tops"><img src="../../images/icn-top.svg" /></paper-tab>
+          <paper-tab label="bottoms"><img src="../../images/icn-bottom.svg" /></paper-tab>
+          <paper-tab label="shoes"><img src="../../images/icn-shoes.svg" /></paper-tab>
+          <paper-tab label="accessoires"><img src="../../images/icn-acc.svg" /></paper-tab>
+        </paper-tabs> -->
+
+    
+        
+      </core-header-panel>
+      <core-header-panel main>
+        <core-toolbar>
+          <paper-icon-button icon="create" core-drawer-toggle></paper-icon-button>
+          <div flex></div>
+        </core-toolbar>
+        <div vertical layout center center-justified>
+        <a-avatar user="{{globals.user.gsm}}" avatar="{{avatar}}"></a-avatar>
+    </div>
+      </core-header-panel>
+    </core-drawer-panel>
+
+
+
+
+    <!-- 
+
     <core-toolbar>
 		<core-icon-button icon="arrow-back" on-tap="{{goHome}}"></core-icon-button>
 		<span flex></span>
 	</core-toolbar>
-	<div vertical layout center>
+
+	<div vertical layout center center-justified>
 		<a-avatar user="{{globals.user.gsm}}" avatar="{{avatar}}"></a-avatar>
 	</div>
 
-    <core-menu valueattr="label" selected="{{categorie}}">
-      <core-item label="snitten"></core-item>
-      <core-item label="gezichten"></core-item>
-      <core-item label="accs"></core-item>
-    </core-menu>
-	
-    <core-pages selected="{{categorie}}" valueattr="cat">
-	<section cat="snitten">
-		<template repeat="{{i in snitten}}">
-			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-		</template>
-	</section>
-	
-	<section cat="gezichten">
-		<template repeat="{{i in gezichten}}">
-			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-		</template>
-	</section>
+    <core-header-panel flex>
 
-	<section cat="accs">
-		<template repeat="{{i in accs}}">
-			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-		</template>
-	</section>
+      <core-toolbar vertical layout center>
+        <paper-tabs valueattr="label" selected="{{categorie}}">
+          <paper-tab label="gezichten"><img src="../../images/icn-gezicht.svg" /></paper-tab>
+          <paper-tab label="snitten" ><img src="../../images/icn-snit.svg" /></paper-tab>
+          <paper-tab label="baarden"><img src="../../images/icn-baard.svg" /></paper-tab>
+          <paper-tab label="tops"><img src="../../images/icn-top.svg" /></paper-tab>
+          <paper-tab label="bottoms"><img src="../../images/icn-bottom.svg" /></paper-tab>
+          <paper-tab label="shoes"><img src="../../images/icn-shoes.svg" /></paper-tab>
+          <paper-tab label="accessoires"><img src="../../images/icn-acc.svg" /></paper-tab>
+        </paper-tabs>
+      </core-toolbar>
 
-	<section cat="baarden">
-		<template repeat="{{i in baarden}}">
-			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-		</template>
-	</section>
+      <div class="selektor">
+      
+      <core-pages selected="{{categorie}}" valueattr="cat">
 
-	<section cat="snorren">
-		<template repeat="{{i in snorren}}">
-			<img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-		</template>
-	</section>
+            <section cat="snitten">
+                <template repeat="{{i in snitten}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
+            
+            <section cat="gezichten">
+                <template repeat="{{i in gezichten}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
 
-    <section cat="tops">
-        <template repeat="{{i in tops}}">
-            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-        </template>
-    </section>
+            <section cat="accs">
+                <template repeat="{{i in accs}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
 
-    <section cat="bottoms">
-        <template repeat="{{i in bottoms}}">
-            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-        </template>
-    </section>
+            <section cat="baarden">
+                <template repeat="{{i in baarden}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
 
-    <section cat="lijfs">
-        <template repeat="{{i in lijfs}}">
-            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-        </template>
-    </section>
+            <section cat="snorren">
+                <template repeat="{{i in snorren}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
 
-    <section cat="shoess">
-        <template repeat="{{i in shoess}}">
-            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-        </template>
-    </section>
+            <section cat="tops">
+                <template repeat="{{i in tops}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
 
-    <section cat="oogmonds">
-        <template repeat="{{i in oogmonds}}">
-            <img src="{{i.src}}" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
-        </template>
-    </section>
+            <section cat="bottoms">
+                <template repeat="{{i in bottoms}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
+
+            <section cat="lijfs">
+                <template repeat="{{i in lijfs}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
+
+            <section cat="shoess">
+                <template repeat="{{i in shoess}}">
+                    <img src="{{i.src}}" class="selektorbox" cat="{{i.item}}" on-tap="{{selectItem}}" width="80" height="144">
+                </template>
+            </section>
+
     </core-pages>
+    </div>
+    </core-header-panel> -->
+
 
 </template>
 <script>

@@ -2,23 +2,18 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: 'Open Sans', sans-serif;
-  background-color: white; }
+  background-image: url('../../images/bg_first.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%; }
 
 core-toolbar {
-  background-color: #219dc8; }
+  background-color: white; }
 
 core-scroll-header-panel {
   height: 100%; }
 
 .avatar {
-  width: 100px;
-  height: 100px;
-  background-color: #eeeeee;
-  border-radius: 50%;
-  border-color: white;
-  border-width: 2px;
-  border-style: solid;
-  margin: 0px 8px 0px 8px; }
+  margin-top: 50px; }
 
 [drawer] {
   background-color: #219dc8; }

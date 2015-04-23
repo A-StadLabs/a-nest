@@ -1,6 +1,5 @@
 :host {
 	display: block;
-	background-color: white !important;
 	height: 100%;
 }
 
@@ -12,6 +11,24 @@
 	height: 300px;
 }
 
-a-avatar {
-	height: 430px;
+.selektor {
+	height: 50%;
+	overflow: scroll;
+}
+
+.selektorbox {
+
+}
+
+core-drawer-panel {
+	background-color: white;
+	height: 100%;
+}
+
+.red {
+	background-color: red;
+}
+
+core-toolbar {
+	background-color: transparent;
 }

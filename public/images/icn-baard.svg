@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px"
+	 height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
+<g id="Laag_1">
+</g>
+<g id="Laag_2">
+	<path fill="none" stroke="#020303" stroke-miterlimit="10" d="M27.611,12.499c0,0.75-0.606,1.356-1.358,1.356H12.802
+		c-0.751,0-1.359-0.606-1.359-1.356V9.105c0-0.749,0.607-1.357,1.359-1.357h13.451c0.751,0,1.358,0.608,1.358,1.357V12.499z"/>
+	<path fill="none" stroke="#020303" stroke-miterlimit="10" d="M18.875,42.099c-1.129,0-2.041-0.914-2.041-2.042V19.821
+		c0-1.13,0.912-2.041,2.041-2.041h1.302c1.13,0,2.042,0.911,2.042,2.041v20.235c0,1.128-0.912,2.042-2.042,2.042H18.875z"/>
+	<line fill="#FFFFFF" stroke="#020303" stroke-miterlimit="10" x1="12.775" y1="9.857" x2="26.279" y2="9.857"/>
+	<line fill="#FFFFFF" stroke="#020303" stroke-miterlimit="10" x1="12.775" y1="11.746" x2="26.279" y2="11.746"/>
+	<rect x="18.875" y="13.855" fill="none" stroke="#020303" stroke-miterlimit="10" width="1.642" height="3.925"/>
+	<g>
+		<path fill="none" stroke="#020303" stroke-miterlimit="10" d="M31.755,22.606c-1.75-0.256-0.818,6.325-0.398,10.303
+			c0.416,3.977,0.552,9.265,3.691,8.937c1.466-0.154,2.579-0.812,2.393-2.59c-0.109-1.042-2.543-5.315-3.359-9.537
+			C33.583,27.136,32.423,22.702,31.755,22.606z"/>
+		<circle fill="#020303" cx="34.903" cy="39.192" r="0.822"/>
+		<g>
+			<path fill="none" stroke="#020303" stroke-miterlimit="10" d="M30.935,28.957l-0.354,1.814c0,0-0.616,2.082-2.169,2.514
+				c-1.329,0.369,1.541,1.24,2.879-0.982C31.177,31.27,31.044,30.109,30.935,28.957z"/>
+			<path fill="none" stroke="#020303" stroke-miterlimit="10" d="M37.46,7.748c-2.178-0.545-2.802,2.1-2.802,2.1L32.104,22.96
+				c0.261,0.429,0.553,1.213,0.84,2.148c0.408-2.096,0.721-3.704,0.721-3.704l1.516,0.296c0,0,1.316,0.291,1.591-1l2.139-10.843
+				C38.911,9.857,39.387,8.23,37.46,7.748z"/>
+		</g>
+	</g>
+	<line fill="none" stroke="#020303" stroke-width="0.5" stroke-miterlimit="10" x1="37.46" y1="8.269" x2="35.283" y2="18.796"/>
+</g>
+</svg>

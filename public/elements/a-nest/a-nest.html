@@ -26,17 +26,15 @@ response="{{logoutresp}}"
 on-core-response="{{logoutresponse}}">
 </core-ajax>
 
-<core-scroll-header-panel>
-<core-toolbar>
-<span flex></span>
-<core-icon-button icon="exit-to-app" on-tap="{{logout}}">l</core-icon-button>
-</core-toolbar>
+<core-scroll-header-panel fixed>
 
-<div>
+<div vertical layout center on-tap="{{goProfile}}" class="core-header">
+        <a-avatar user="{{gsm}}" class="avatar"></a-avatar>
+    </div>
+
+<div main>
 	<firebase-element location="https://blazing-fire-6426.firebaseio.com/cards/{{globals.user.gsm}}/" on-data-change="{{getCards}}" response="" keys="{{keys}}" data="{{data}}"></firebase-element>
-	<div vertical layout center on-tap="{{goProfile}}">
-		<a-avatar user="{{gsm}}"></a-avatar>
-	</div>
+	
 
 
     <button on-tap="{{logout}}">logout</button>
